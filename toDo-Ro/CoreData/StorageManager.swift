@@ -28,7 +28,6 @@ class StorageManager {
     }
     
     // MARK: - Task List
-    
     func fetchData(completion: (Result<[TaskLists], Error>) -> Void) {
         let fetchRequest = TaskLists.fetchRequest()
         
@@ -38,6 +37,28 @@ class StorageManager {
         } catch let error {
             completion(.failure(error))
         }
+    }
+    
+    func createTaskList(name: String, completion: (TaskLists) -> Void) {
+        let taskList = TaskLists(context: viewContext)
+        taskList.name = name
+        completion(taskList)
+        saveContext()
+    }
+    
+    func editTaskList(_ taskList: TaskLists, newValue: String) {
+        taskList.name = newValue
+        saveContext()
+    }
+    
+    func doneTaskList(_ taskList: TaskLists) {
+        taskList.tasks?.setValue(true, forKey: "isComplete")
+        saveContext()
+    }
+    
+    func deleteTaskList(_ taskListName: TaskLists) {
+        viewContext.delete(taskListName)
+        saveContext()
     }
     
     // MARK: - Core Data Saving support

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5118346C2951E762000902F4 /* +UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5118346B2951E762000902F4 /* +UIAlertController.swift */; };
+		5118346F2951EBA0000902F4 /* TasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5118346E2951EBA0000902F4 /* TasksViewController.swift */; };
 		514E9B5D2951D3A500C9D5DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B5C2951D3A500C9D5DA /* AppDelegate.swift */; };
 		514E9B5F2951D3A500C9D5DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B5E2951D3A500C9D5DA /* SceneDelegate.swift */; };
 		514E9B612951D3A500C9D5DA /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B602951D3A500C9D5DA /* TaskListViewController.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5118346B2951E762000902F4 /* +UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+UIAlertController.swift"; sourceTree = "<group>"; };
+		5118346E2951EBA0000902F4 /* TasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewController.swift; sourceTree = "<group>"; };
 		514E9B592951D3A500C9D5DA /* toDo-Ro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "toDo-Ro.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		514E9B5C2951D3A500C9D5DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		514E9B5E2951D3A500C9D5DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +90,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5118346A2951E74F000902F4 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				5118346B2951E762000902F4 /* +UIAlertController.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		5118346D2951EB82000902F4 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				5118346E2951EBA0000902F4 /* TasksViewController.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
 		514E9B502951D3A500C9D5DA = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +133,7 @@
 		514E9B5B2951D3A500C9D5DA /* toDo-Ro */ = {
 			isa = PBXGroup;
 			children = (
+				5118346A2951E74F000902F4 /* Extension */,
 				514E9B8F2951DC7E00C9D5DA /* CoreData */,
 				514E9B5C2951D3A500C9D5DA /* AppDelegate.swift */,
 				514E9B5E2951D3A500C9D5DA /* SceneDelegate.swift */,
@@ -154,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				514E9B992951DF4E00C9D5DA /* TaskList */,
+				5118346D2951EB82000902F4 /* Tasks */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -298,10 +320,12 @@
 			files = (
 				514E9B612951D3A500C9D5DA /* TaskListViewController.swift in Sources */,
 				514E9B9B2951DF8D00C9D5DA /* StorageManager.swift in Sources */,
+				5118346F2951EBA0000902F4 /* TasksViewController.swift in Sources */,
 				514E9B942951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift in Sources */,
 				514E9B962951DD1A00C9D5DA /* Task+CoreDataClass.swift in Sources */,
 				514E9B952951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift in Sources */,
 				514E9B5D2951D3A500C9D5DA /* AppDelegate.swift in Sources */,
+				5118346C2951E762000902F4 /* +UIAlertController.swift in Sources */,
 				514E9B672951D3A500C9D5DA /* toDo_Ro.xcdatamodeld in Sources */,
 				514E9B972951DD1A00C9D5DA /* Task+CoreDataProperties.swift in Sources */,
 				514E9B5F2951D3A500C9D5DA /* SceneDelegate.swift in Sources */,
