@@ -16,7 +16,7 @@ extension TaskLists {
         return NSFetchRequest<TaskLists>(entityName: "TaskLists")
     }
 
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var date: Date?
     @NSManaged public var tasks: NSSet?
 

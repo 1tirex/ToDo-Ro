@@ -56,10 +56,71 @@ class StorageManager {
         saveContext()
     }
     
-    func deleteTaskList(_ taskListName: TaskLists) {
-        viewContext.delete(taskListName)
+    func deleteTaskList(_ taskList: TaskLists) {
+        viewContext.delete(taskList)
         saveContext()
     }
+    
+    // MARK: - Tasks
+    
+    func tasks(list: TaskLists, status: Bool? = nil) -> [Task] {
+        var fetchedTasks: [Task] = []
+        
+        do {
+            let request: NSFetchRequest<Task> = Task.fetchRequest()
+            let pred = NSPredicate(format: "taskList = %@", list)
+            request.predicate = pred
+            
+            if status == nil {
+                fetchedTasks = try viewContext.fetch(request)
+            } else {
+                guard let status = status else { return []}
+                print(status)
+                fetchedTasks = try viewContext.fetch(request).filter{ $0.isComplete == status }
+            }
+        } catch {
+            print("Error fetching songs \(error)")
+        }
+        return fetchedTasks
+    }
+    
+    func save(_ name: String, withNote note: String, to taskList: TaskLists, completion: (Task) -> Void) {
+        let task = Task(context: viewContext)
+        task.note = note
+        task.name = name
+        task.isComplete = false
+        taskList.addToTasks(task)
+        completion(task)
+        saveContext()
+    }
+    
+    func rename(_ task: Task, to name: String, withNote note: String) {
+        task.name = name
+        task.note = note
+        saveContext()
+    }
+    
+    func doneTask(_ task: Task) {
+        task.isComplete.toggle()
+        saveContext()
+    }
+    
+    func deleteTask(_ task: Task) {
+        viewContext.delete(task)
+        saveContext()
+    }
+    
+    //
+//    func fetchCount() {
+//        do {
+//            let request = TaskLists.fetchRequest() as NSFetchRequest<TaskLists>
+//            let fetch = try viewContext.fetch(request)
+//            
+//        } catch {
+//            print(error)
+//        }
+//    }
+    //
     
     // MARK: - Core Data Saving support
     func saveContext() {

@@ -9,8 +9,12 @@ import UIKit
 
 extension UIAlertController {
     
-    static func createAlert(withTitle title: String, andMessage message: String) -> UIAlertController {
-        UIAlertController(title: title, message: message, preferredStyle: .alert)
+    static func createAlert(withTitle title: String,
+                            andMessage message: String) -> UIAlertController {
+        UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert)
     }
         
     func action(with taskList: TaskLists?, completion: @escaping (String) -> Void) {
@@ -19,8 +23,12 @@ extension UIAlertController {
                 
         let saveAction = UIAlertAction(title: doneButton, style: .default) { _ in
             guard let newValue = self.textFields?.first?.text else { return }
-            guard !newValue.isEmpty else { return }
-            completion(newValue)
+            if newValue.isEmpty {
+                completion("No name")
+            } else {
+                completion(newValue)
+            }
+//            guard !newValue.isEmpty else { return }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
