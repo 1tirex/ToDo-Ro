@@ -63,10 +63,10 @@
 		514E9B7C2951D3A900C9D5DA /* toDo-RoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toDo-RoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		514E9B802951D3A900C9D5DA /* toDo_RoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toDo_RoUITests.swift; sourceTree = "<group>"; };
 		514E9B822951D3A900C9D5DA /* toDo_RoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toDo_RoUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		514E9B902951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TaskLists+CoreDataClass.swift"; path = "toDo-Ro/CoreData/TaskLists+CoreDataClass.swift"; sourceTree = "<group>"; };
-		514E9B912951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TaskLists+CoreDataProperties.swift"; path = "toDo-Ro/CoreData/TaskLists+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		514E9B922951DD1A00C9D5DA /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Task+CoreDataClass.swift"; path = "toDo-Ro/CoreData/Task+CoreDataClass.swift"; sourceTree = "<group>"; };
-		514E9B932951DD1A00C9D5DA /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Task+CoreDataProperties.swift"; path = "toDo-Ro/CoreData/Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		514E9B902951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskLists+CoreDataClass.swift"; sourceTree = "<group>"; };
+		514E9B912951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskLists+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		514E9B922951DD1A00C9D5DA /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
+		514E9B932951DD1A00C9D5DA /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		514E9B9A2951DF8D00C9D5DA /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		515C1D9D295341480063F16D /* TasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewModel.swift; sourceTree = "<group>"; };
 		515C1DA4295354E70063F16D /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
@@ -119,10 +119,6 @@
 		514E9B502951D3A500C9D5DA = {
 			isa = PBXGroup;
 			children = (
-				514E9B902951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift */,
-				514E9B912951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift */,
-				514E9B922951DD1A00C9D5DA /* Task+CoreDataClass.swift */,
-				514E9B932951DD1A00C9D5DA /* Task+CoreDataProperties.swift */,
 				514E9B5B2951D3A500C9D5DA /* toDo-Ro */,
 				514E9B752951D3A900C9D5DA /* toDo-RoTests */,
 				514E9B7F2951D3A900C9D5DA /* toDo-RoUITests */,
@@ -174,6 +170,10 @@
 		514E9B8F2951DC7E00C9D5DA /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				514E9B902951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift */,
+				514E9B912951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift */,
+				514E9B922951DD1A00C9D5DA /* Task+CoreDataClass.swift */,
+				514E9B932951DD1A00C9D5DA /* Task+CoreDataProperties.swift */,
 				514E9B652951D3A500C9D5DA /* toDo_Ro.xcdatamodeld */,
 			);
 			path = CoreData;

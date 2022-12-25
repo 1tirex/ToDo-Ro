@@ -8,6 +8,9 @@
 import UIKit
 
 extension UIAlertController {
+    private enum AlertForWhat {
+        case taskList, tasks
+    }
     
     static func createAlert(withTitle title: String,
                             andMessage message: String) -> UIAlertController {
@@ -16,60 +19,82 @@ extension UIAlertController {
             message: message,
             preferredStyle: .alert)
     }
-        
-    func action(with taskList: TaskLists?, completion: @escaping (String) -> Void) {
-        
-        let doneButton = taskList == nil ? "Save" : "Update"
+    
+    // MARK: - taskList
+    func action(with taskList: TaskLists?,
+                for alert: UIAlertController,
+                delegate: UITextFieldDelegate? = nil,
+                completion: @escaping (String) -> Void) {
                 
-        let saveAction = UIAlertAction(title: doneButton, style: .default) { _ in
-            guard let newValue = self.textFields?.first?.text else { return }
-            if newValue.isEmpty {
-                completion("No name")
-            } else {
-                completion(newValue)
-            }
-//            guard !newValue.isEmpty else { return }
+        let saveAction = saveAction(for: .taskList,
+                                    taskList: taskList,
+                                    alert: alert) { newValue in
+            completion(newValue)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         
-        addAction(saveAction)
-        addAction(cancelAction)
-        addTextField { textField in
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+        alert.addTextField { textField in
             textField.placeholder = "List Name"
+            textField.delegate = delegate
             textField.text = taskList?.name
         }
     }
     
-    func action(with task: Task?, completion: @escaping (String, String) -> Void) {
-                        
-        let title = task == nil ? "Save" : "Update"
+    // MARK: - task
+    func action(with task: Task?,
+                for alert: UIAlertController,
+                delegate: UITextFieldDelegate? = nil,
+                completion: @escaping (String, String) -> Void) {
         
-        let saveAction = UIAlertAction(title: title, style: .default) { _ in
-            guard let newTask = self.textFields?.first?.text else { return }
-            guard !newTask.isEmpty else { return }
-            
-            if let note = self.textFields?.last?.text, !note.isEmpty {
-                completion(newTask, note)
+        let saveAction = saveAction(for: .tasks, alert: alert) { newValue in
+            if let note = alert.textFields?.last?.text, !note.isEmpty {
+                completion(newValue, note)
             } else {
-                completion(newTask, "")
+                completion(newValue, "")
             }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         
-        addAction(saveAction)
-        addAction(cancelAction)
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
         
-        addTextField { textField in
+        alert.addTextField { textField in
             textField.placeholder = "New task"
+            textField.delegate = delegate
             textField.text = task?.name
         }
         
-        addTextField { textField in
+        alert.addTextField { textField in
             textField.placeholder = "Note"
             textField.text = task?.note
         }
     }
+    
+    // MARK: - logicSave
+    private func saveAction(for cases: AlertForWhat,
+                            taskList: TaskLists? = nil,
+                            task: Task? = nil,
+                            alert: UIAlertController,
+                            completion: @escaping (String) -> Void) -> UIAlertAction {
+        
+        var doneButton: String
+        switch cases {
+        case .taskList:
+            doneButton = taskList == nil ? "Save" : "Update"
+        case .tasks:
+            doneButton = task == nil ? "Save" : "Update"
+        }
+        
+       let save = UIAlertAction(title: doneButton, style: .default) { _ in
+            guard let newValue = alert.textFields?.first?.text else { return }
+            guard !newValue.isEmpty, newValue.count >= 1 else { return completion("no Value")}
+            completion(newValue)
+        }
+        save.isEnabled = false
+        return save
+    }
 }
-

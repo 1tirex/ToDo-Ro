@@ -8,6 +8,8 @@
 import Foundation
 
 protocol TasksViewModelProtocol {
+    
+    var cellID: String { get }
     var taskName: String { get }
     var currentTasks: Box<[Task]> { get }
     var completedTasks: Box<[Task]> { get }
@@ -15,18 +17,23 @@ protocol TasksViewModelProtocol {
     func numberOfSections() -> Int
     func numberOfRows(section: Int) -> Int
     func titleForHeader(section: Int) -> String
-    func getTask(for: IndexPath) -> Task
+    func titleForAlert(task: Task?) -> String
+    func titleForDoneAlert(for: IndexPath) -> String
+    func getTask(from: IndexPath) -> Task
     func remove(from: Task)
-    func titleForDone(for: IndexPath) -> String
-    func taskIndex(status: Bool) -> IndexPath
+    func editTask(_: Task, newName: String, newNote: String)
     func done(task: Task)
-    func destinationIndexRow(for: IndexPath) -> IndexPath
     func saveNew(task: String, note: String, completion: @escaping(Task) -> Void)
-//    func setupTasksStatus()
+    func taskIndex(status: Bool) -> IndexPath
+    func destinationIndexRow(for: IndexPath) -> IndexPath
+    func checkingIsEmpty(textField: String?) -> Bool
 }
 
 final class TasksViewModel: TasksViewModelProtocol {
-
+    var cellID: String {
+        "cellID"
+    }
+    
     var taskName: String {
         taskList.name
     }
@@ -38,8 +45,8 @@ final class TasksViewModel: TasksViewModelProtocol {
     
     init(taskList: TaskLists) {
         self.taskList = taskList
-        currentTasks = Box(StorageManager.shared.tasks(list: taskList, status: false))
-        completedTasks = Box(StorageManager.shared.tasks(list: taskList, status: true))
+        currentTasks = Box(StorageManager.shared.fetchTasks(list: taskList, status: false))
+        completedTasks = Box(StorageManager.shared.fetchTasks(list: taskList, status: true))
     }
     
     func numberOfSections() -> Int {
@@ -54,7 +61,15 @@ final class TasksViewModel: TasksViewModelProtocol {
         section == 0 ? "CURRENT TASKS" : "COMPLETED TASKS"
     }
     
-    func getTask(for indexPath: IndexPath) -> Task {
+    func titleForAlert(task: Task?) -> String {
+        task != nil ? "Edit List" : "New List"
+    }
+    
+    func titleForDoneAlert(for indexPath: IndexPath) -> String {
+        indexPath.section == 0 ? "Done" : "Undone"
+    }
+    
+    func getTask(from indexPath: IndexPath) -> Task {
         indexPath.section == 0
         ? currentTasks.value[indexPath.row]
         : completedTasks.value[indexPath.row]
@@ -66,8 +81,8 @@ final class TasksViewModel: TasksViewModelProtocol {
         setupTasksStatus()
     }
     
-    func titleForDone(for indexPath: IndexPath) -> String {
-        indexPath.section == 0 ? "Done" : "Undone"
+    func editTask(_ task: Task, newName: String, newNote: String) {
+        StorageManager.shared.editTask(task, to: newName, withNote: newNote)
     }
     
     func taskIndex(status: Bool) -> IndexPath {
@@ -89,14 +104,19 @@ final class TasksViewModel: TasksViewModelProtocol {
     
     
     func saveNew(task: String, note: String, completion: @escaping (Task) -> Void) {
-        StorageManager.shared.save(task, withNote: note, to: taskList) { task in
+        StorageManager.shared.saveTask(task, withNote: note, to: taskList) { task in
             setupTasksStatus()
             completion(task)
         }
     }
     
     private func setupTasksStatus() {
-        currentTasks.value = StorageManager.shared.tasks(list: taskList, status: false)
-        completedTasks.value = StorageManager.shared.tasks(list: taskList, status: true)
+        currentTasks.value = StorageManager.shared.fetchTasks(list: taskList, status: false)
+        completedTasks.value = StorageManager.shared.fetchTasks(list: taskList, status: true)
+    }
+    
+    func checkingIsEmpty(textField: String?) -> Bool {
+        guard let text = textField else { return false}
+        return !text.isEmpty ? true : false
     }
 }

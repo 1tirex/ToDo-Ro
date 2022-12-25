@@ -10,9 +10,11 @@ import UIKit
 extension UITableViewCell {
     func configure(with taskList: TaskLists) {
         
-        let currentTasks = StorageManager.shared.tasks(list: taskList).filter { $0.isComplete == false}
-        var content = defaultContentConfiguration()
+        let currentTasks = StorageManager.shared
+            .fetchTasks(list: taskList)
+            .filter { $0.isComplete == false}
         
+        var content = defaultContentConfiguration()
         content.text = taskList.name
         
         if taskList.tasks?.count == 0 {
@@ -25,7 +27,6 @@ extension UITableViewCell {
             content.secondaryText = currentTasks.count.formatted()
             accessoryType = .none
         }
-
         contentConfiguration = content
     }
 }

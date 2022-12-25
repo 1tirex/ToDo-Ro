@@ -28,7 +28,7 @@ class StorageManager {
     }
     
     // MARK: - Task List
-    func fetchData(completion: (Result<[TaskLists], Error>) -> Void) {
+    func fetchTaskLists(completion: (Result<[TaskLists], Error>) -> Void) {
         let fetchRequest = TaskLists.fetchRequest()
         
         do {
@@ -39,9 +39,10 @@ class StorageManager {
         }
     }
     
-    func createTaskList(name: String, completion: (TaskLists) -> Void) {
+    func saveTaskList(name: String, completion: (TaskLists) -> Void) {
         let taskList = TaskLists(context: viewContext)
         taskList.name = name
+        taskList.date = .now
         completion(taskList)
         saveContext()
     }
@@ -62,8 +63,7 @@ class StorageManager {
     }
     
     // MARK: - Tasks
-    
-    func tasks(list: TaskLists, status: Bool? = nil) -> [Task] {
+    func fetchTasks(list: TaskLists, status: Bool? = nil) -> [Task] {
         var fetchedTasks: [Task] = []
         
         do {
@@ -74,8 +74,6 @@ class StorageManager {
             if status == nil {
                 fetchedTasks = try viewContext.fetch(request)
             } else {
-                guard let status = status else { return []}
-                print(status)
                 fetchedTasks = try viewContext.fetch(request).filter{ $0.isComplete == status }
             }
         } catch {
@@ -84,17 +82,17 @@ class StorageManager {
         return fetchedTasks
     }
     
-    func save(_ name: String, withNote note: String, to taskList: TaskLists, completion: (Task) -> Void) {
+    func saveTask(_ name: String, withNote note: String, to taskList: TaskLists, completion: (Task) -> Void) {
         let task = Task(context: viewContext)
         task.note = note
         task.name = name
-        task.isComplete = false
+        task.date = .now
         taskList.addToTasks(task)
         completion(task)
         saveContext()
     }
     
-    func rename(_ task: Task, to name: String, withNote note: String) {
+    func editTask(_ task: Task, to name: String, withNote note: String) {
         task.name = name
         task.note = note
         saveContext()
@@ -109,18 +107,6 @@ class StorageManager {
         viewContext.delete(task)
         saveContext()
     }
-    
-    //
-//    func fetchCount() {
-//        do {
-//            let request = TaskLists.fetchRequest() as NSFetchRequest<TaskLists>
-//            let fetch = try viewContext.fetch(request)
-//            
-//        } catch {
-//            print(error)
-//        }
-//    }
-    //
     
     // MARK: - Core Data Saving support
     func saveContext() {

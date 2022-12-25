@@ -9,37 +9,33 @@ import UIKit
 
 class TasksViewController: UIViewController {
     
+    // MARK: Visual Components
+    private var alert = UIAlertController()
     private let tableView = UITableView()
-    private static let cellID = "cellID"
     
+    // MARK: Public Properties
     var viewModel: TasksViewModelProtocol!
     
+    // MARK: Life Circle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
-    init(taskList: TaskLists) {
-        viewModel = TasksViewModel(taskList: taskList)
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    // MARK: objc Action
     @objc private func addButtonPressed() {
         showAlert()
     }
     
+    // MARK: Private Methods
     private func setupUI() {
         setupTableView()
         setupNavigationBar()
     }
-    
+
     private func setupTableView() {
         view.addSubview(tableView)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: TasksViewController.cellID)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +62,7 @@ class TasksViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension TasksViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.numberOfSections()
@@ -80,9 +77,9 @@ extension TasksViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TasksViewController.cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
         var content = cell.defaultContentConfiguration()
-        let task = viewModel.getTask(for: indexPath)
+        let task = viewModel.getTask(from: indexPath)
         content.text = task.name
         content.secondaryText = task.note
         cell.contentConfiguration = content
@@ -90,56 +87,64 @@ extension TasksViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let task = viewModel.getTask(for: indexPath)
+        let task = viewModel.getTask(from: indexPath)
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _, _, _ in
+        let deleteAction = UIContextualAction(style: .destructive,
+                                              title: "Delete") { [unowned self] _, _, _ in
             viewModel.remove(from: task)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
-        
-        let editAction = UIContextualAction(style: .normal, title: "Edit") { [unowned self] _, _, isDone in
+        let editAction = UIContextualAction(style: .normal,
+                                            title: "Edit") { [unowned self] _, _, isDone in
             showAlert(with: task) {
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
             isDone(true)
         }
-        
-        let doneAction = UIContextualAction(style: .normal, title: viewModel.titleForDone(for: indexPath)) { [unowned self] _, _, isDone in
-
+        let doneAction = UIContextualAction(style: .normal,
+                                            title: viewModel.titleForDoneAlert(for: indexPath)) { [unowned self] _, _, isDone in
+            
             viewModel.done(task: task)
-            let destinationIndexRow = viewModel.destinationIndexRow(for: indexPath)
-            tableView.moveRow(at: indexPath, to: destinationIndexRow)
+//            let destinationIndexRow = viewModel.destinationIndexRow(for: indexPath)
+            tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
             isDone(true)
             
         }
         
-        editAction.backgroundColor = .orange
+        editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         
         return UISwipeActionsConfiguration(actions: [doneAction, editAction, deleteAction])
     }
-    
 }
 
+// MARK: - UITextFieldDelegate
+extension TasksViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        alert.actions
+            .filter { $0.style == .default }
+            .first?.isEnabled = viewModel.checkingIsEmpty(textField: textField.text)
+    }
+}
+
+// MARK: - UIAlertController
 extension TasksViewController {
-    
     private func showAlert(with task: Task? = nil, completion: (() -> Void)? = nil) {
-        let title = task != nil ? "Edit List" : "New List"
         
-        let alert = UIAlertController.createAlert(withTitle: title,
-                                                  andMessage: "What do you want to do?")
+        alert = UIAlertController.createAlert(withTitle: viewModel.titleForAlert(task: task),
+                                              andMessage: "What do you want to do?")
         
-        alert.action(with: task) { newValue, note in
+        alert.action(with: task, for: alert, delegate: self) { [unowned self] newValue, note in
             if let task = task, let completion = completion {
-                StorageManager.shared.rename(task, to: newValue, withNote: note)
+                viewModel.editTask(task, newName: newValue, newNote: note)
                 completion()
             } else {
                 self.save(task: newValue, withNote: note)
             }
         }
-        
         present(alert, animated: true)
     }
     
