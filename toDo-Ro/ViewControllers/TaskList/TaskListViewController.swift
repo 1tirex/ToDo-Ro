@@ -13,6 +13,9 @@ class TaskListViewController: UIViewController {
     private var alert = UIAlertController()
     private var addButton = UIBarButtonItem()
     private var editButton = UIBarButtonItem()
+    private var sortNameButton = UIButton()
+    private var sortDateButton = UIButton()
+//    private var imageViewForButton = UIImageView()
     private lazy var segmentControl = UISegmentedControl(items: viewModel.itemsSegmentController)
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -59,15 +62,39 @@ class TaskListViewController: UIViewController {
         }
     }
     
+    @objc private func pushSortAction(_ sender: UIButton) {
+        sortingNameButton(sender)
+        viewModel.sortTaskList(segment: 1) { [unowned self] in
+            tableView.reloadData()
+        }
+    }
+    
+    @objc func handleIn(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.15) { sender.alpha = 0.55 }
+    }
+    
+    @objc func handleOut(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.15) { sender.alpha = 1 }
+    }
+    
     // MARK: Private Methods
     private func setupUI() {
-        view.backgroundColor = .systemBackground
-        view.addSubview(tableView)
-        view.addSubview(segmentControl)
+        addSubviews(tableView, segmentControl, sortDateButton, sortNameButton)
         setBackgroundColor()
         setupTableView()
         setupSegmentControl()
         setupNavigationBar()
+        setupSortButton()
+        setupSortDateButton()
+        makeSystem(sortNameButton)
+        makeSystem(sortDateButton)
+    }
+    
+    private func addSubviews(_ views: UIView...) {
+        views.forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func setBackgroundColor() {
@@ -83,13 +110,12 @@ class TaskListViewController: UIViewController {
     }
     
     private func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: viewModel.cellID)
+        tableView.register(UITableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 20),
+            tableView.topAnchor.constraint(equalTo: sortNameButton.bottomAnchor, constant: 20),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
@@ -101,11 +127,14 @@ class TaskListViewController: UIViewController {
         segmentControl.layer.cornerRadius = 10
         segmentControl.layer.borderColor = .none
         segmentControl.layer.masksToBounds = true
-        segmentControl.translatesAutoresizingMaskIntoConstraints = false
         
-        segmentControl.addTarget(self,
-                                 action: #selector(segmentAction(_:)),
-                                 for: .valueChanged)
+        segmentControl.isHidden = true
+        
+        segmentControl.addTarget(
+            self,
+            action: #selector(segmentAction(_:)),
+            for: .valueChanged
+        )
         
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -118,7 +147,7 @@ class TaskListViewController: UIViewController {
         title = "Task List"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
-        setupNavigationButtonItems()
+        
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithTransparentBackground()
         navBarAppearance.backgroundColor = .clear
@@ -126,12 +155,14 @@ class TaskListViewController: UIViewController {
         navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.secondaryLabel]
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        setupNavigationButtonItems()
     }
     
     private func setupNavigationButtonItems() {
-        addButton = UIBarButtonItem(barButtonSystemItem: .add,
-                                    target: self,
-                                    action: #selector(pushAddAction))
+        addButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(pushAddAction))
         
         editButton.action = #selector(pushEditAction)
         editButton.title = "Edit"
@@ -140,14 +171,103 @@ class TaskListViewController: UIViewController {
         navigationItem.rightBarButtonItems = [addButton, editButton]
     }
     
+    private func setupButton(_ sender: UIButton) {
+        sender.setTitleColor(.label, for: .normal)
+        sender.layer.cornerRadius = 5
+        sender.backgroundColor =
+        UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return .systemGray6
+            default:
+                return .systemGray5
+            }
+        }
+        
+        sender.addTarget(
+            self,
+            action: #selector(pushSortAction(_:)),
+            for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            sender.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            sender.widthAnchor.constraint(equalToConstant: 80),
+            sender.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
+    
+    private func setupSortButton() {
+        sortNameButton.setTitle("A - Z", for: .normal)
+        setupButton(sortNameButton)
+        
+        NSLayoutConstraint.activate([
+            sortNameButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+        ])
+    }
+    
+    private func setupSortDateButton() {
+        sortDateButton.setTitle("Date", for: .normal)
+        setupButton(sortDateButton)
+        
+        NSLayoutConstraint.activate([
+            sortDateButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+        ])
+    }
+    
+//    private func setupImageView(status: Bool) -> UIImage? {
+//        var imageViewForButton = UIImageView()
+//        imageViewForButton.image = swapArrowButton(status: status)
+//        return swapArrowButton(status: status) //imageViewForButton.image //?.withRenderingMode(.alwaysTemplate)
+//    }
+    
+    private func swapArrowButton(status: Bool) -> UIImage? {
+        status
+        ? UIImage(named: "downArrow")?.withRenderingMode(.alwaysTemplate)
+        : UIImage(named: "dowArrow")?.withRenderingMode(.alwaysTemplate)
+    }
+    
+    private func sortingNameButton(_ sender: UIButton) {
+        switch sender {
+        case sortNameButton:
+            sortDateButton.setImage(nil, for: .normal)
+            sortDateButton.setTitleColor(.label, for: .normal)
+        case sortDateButton:
+            sortNameButton.setImage(nil, for: .normal)
+            sortNameButton.setTitleColor(.label, for: .normal)
+        default:
+            print("lol")
+        }
+
+        if sender.currentTitleColor == .blue {
+            sender.setImage(swapArrowButton(status: true), for: .normal)
+            sender.setTitleColor(.red, for: .normal)
+            sender.imageView?.tintColor = .red
+
+        } else {
+            sender.setImage(swapArrowButton(status: false), for: .normal)
+            sender.setTitleColor(.blue, for: .normal)
+            sender.imageView?.tintColor = .blue
+        }
+    }
+    
     private func save(taskName: String) {
         viewModel.saveNew(taskList: taskName) { [unowned self] taskList in
             tableView.insertSections(IndexSet(integer: viewModel.numberOfSection() - 1), with: .automatic)
-//            tableView.insertRows(
-//                at: [IndexPath(row: viewModel.numberOfRows() - 1, section: 0)],
-//                with: .automatic
-//            )
         }
+    }
+    private func makeSystem(_ button: UIButton) {
+        button.addTarget(self, action: #selector(handleIn(_:)), for: [
+            .touchDown,
+            .touchDragInside
+        ])
+        
+        button.addTarget(self, action: #selector(handleOut(_:)), for: [
+            .touchDragOutside,
+            .touchUpInside,
+            .touchUpOutside,
+            .touchDragExit,
+            .touchCancel
+        ])
     }
 }
 
@@ -185,14 +305,12 @@ extension TaskListViewController: UITableViewDelegate {
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: "Delete") { [unowned self] _, _, _ in
             viewModel.delete(at: indexPath, taskList: taskList)
-//            tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.deleteSections([indexPath.section], with: .automatic)
         }
         
         let editAction = UIContextualAction(style: .normal,
                                             title: "Edit") { [unowned self] _, _, isDone in
             showAlert(with: taskList) {
-//                tableView.reloadRows(at: [indexPath], with: .automatic)
                 tableView.reloadSections([indexPath.section], with: .automatic)
             }
             isDone(true)
@@ -202,7 +320,6 @@ extension TaskListViewController: UITableViewDelegate {
                                             title: "Done") { [unowned self] _, _, isDone in
             viewModel.done(taskList: taskList)
             tableView.reloadSections([indexPath.section], with: .automatic)
-//            tableView.reloadRows(at: [indexPath], with: .automatic)
             isDone(true)
         }
         
