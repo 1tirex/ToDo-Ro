@@ -14,6 +14,7 @@ Application Task List:
 - additional menu when swiping left (Delete, Edit, Done\Undone)
 - Implemented logic for executing tasks on the button completed or not completed
 - the main screen displays the number of uncompleted tasks, when you click complete, all tasks will automatically go to the status completed
+- Without StoryBoard and XIB, only programmatically
 
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/210013534-e555cba7-27b6-4cdb-96bd-b8c63491a0eb.png"></code>
 
