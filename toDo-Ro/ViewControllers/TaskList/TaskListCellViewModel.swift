@@ -31,7 +31,6 @@ protocol TaskListViewModelProtocol {
 
 final class TaskListViewModel: TaskListViewModelProtocol {
     
-    
     var status: Box<Bool>
     
     var cellID: String {
@@ -73,7 +72,7 @@ final class TaskListViewModel: TaskListViewModelProtocol {
     }
     
     func getTaskList(for indexPath: IndexPath) -> TaskLists {
-        taskLists[indexPath.section] //taskLists[indexPath.row]
+        taskLists[indexPath.section]
     }
     
     func delete(at indexPath: IndexPath, taskList: TaskLists) {
@@ -96,8 +95,6 @@ final class TaskListViewModel: TaskListViewModelProtocol {
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void) {
         StorageManager.shared.saveTaskList(name: taskList) { [unowned self] taskList in
             taskLists.append(taskList)
-            print(taskList)
-            print(taskLists)
             completion(taskList)
         }
     }

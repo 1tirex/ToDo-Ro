@@ -54,9 +54,10 @@ class TasksViewController: UIViewController {
     }
     
     private func setupNavigationButtonItems() {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add,
-                                        target: self,
-                                        action: #selector(addButtonPressed))
+        let addButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addButtonPressed))
         
         navigationItem.rightBarButtonItems = [addButton, editButtonItem]
     }
@@ -65,7 +66,7 @@ class TasksViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension TasksViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.numberOfSections()
+        viewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,6 +98,7 @@ extension TasksViewController: UITableViewDelegate {
             viewModel.remove(from: task)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+        
         let editAction = UIContextualAction(style: .normal,
                                             title: "Edit") { [unowned self] _, _, isDone in
             showAlert(with: task) {
@@ -104,16 +106,14 @@ extension TasksViewController: UITableViewDelegate {
             }
             isDone(true)
         }
+        
         let doneAction = UIContextualAction(style: .normal,
                                             title: viewModel.titleForDoneAlert(for: indexPath)) { [unowned self] _, _, isDone in
             
             viewModel.done(task: task)
-//            let destinationIndexRow = viewModel.destinationIndexRow(for: indexPath)
             tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
             isDone(true)
-            
         }
-        
         editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         

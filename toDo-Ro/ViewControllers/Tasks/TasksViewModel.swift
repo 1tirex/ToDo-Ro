@@ -11,10 +11,10 @@ protocol TasksViewModelProtocol {
     
     var cellID: String { get }
     var taskName: String { get }
+    var numberOfSections: Int { get }
     var currentTasks: Box<[Task]> { get }
     var completedTasks: Box<[Task]> { get }
     init(taskList: TaskLists)
-    func numberOfSections() -> Int
     func numberOfRows(section: Int) -> Int
     func titleForHeader(section: Int) -> String
     func titleForAlert(task: Task?) -> String
@@ -30,12 +30,17 @@ protocol TasksViewModelProtocol {
 }
 
 final class TasksViewModel: TasksViewModelProtocol {
+    
     var cellID: String {
         "cellID"
     }
     
     var taskName: String {
         taskList.name
+    }
+    
+    var numberOfSections: Int {
+        2
     }
     
     var currentTasks: Box<[Task]>
@@ -49,9 +54,6 @@ final class TasksViewModel: TasksViewModelProtocol {
         completedTasks = Box(StorageManager.shared.fetchTasks(list: taskList, status: true))
     }
     
-    func numberOfSections() -> Int {
-        2
-    }
     
     func numberOfRows(section: Int) -> Int {
         section == 0 ? currentTasks.value.count : completedTasks.value.count

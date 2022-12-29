@@ -1,14 +1,14 @@
 //
-//  toDo_RoTests.swift
+//  TaskTests.swift
 //  toDo-RoTests
 //
-//  Created by Илья on 20.12.2022.
+//  Created by Дмитрий Собин on 29.12.22.
 //
 
 import XCTest
-@testable import toDo_Ro
+//@testable import toDo_Ro
 
-final class toDo_RoTests: XCTestCase {
+final class TaskTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

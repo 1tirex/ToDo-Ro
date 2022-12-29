@@ -7,7 +7,7 @@
 
 import CoreData
 
-class StorageManager {
+final class StorageManager {
     static let shared = StorageManager()
     
     // MARK: - Core Data stack

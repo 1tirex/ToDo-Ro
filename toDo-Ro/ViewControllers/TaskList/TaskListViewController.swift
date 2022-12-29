@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TaskListViewController: UIViewController {
+final class TaskListViewController: UIViewController {
     
     // MARK: Visual Components
     private var alert = UIAlertController()
@@ -15,8 +15,8 @@ class TaskListViewController: UIViewController {
     private var sortNameButton = UIButton()
     private var sortDateButton = UIButton()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    
     private let backgroundImage = UIImageView()
+    
     // MARK: Private Properties
     private var viewModel: TaskListViewModelProtocol! {
         didSet {
@@ -107,6 +107,7 @@ class TaskListViewController: UIViewController {
             backgroundImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
     private func setupTableView() {
         tableView.register(UITableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
