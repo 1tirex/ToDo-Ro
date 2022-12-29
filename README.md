@@ -33,3 +33,5 @@ And until the name for the task is specified, the add button will be inactive.
 On the first screen, the logic of sorting by buttons is implemented, and on the second screen, it is implemented by completed or not completed; 
 
 When the task status changes, it smoothly goes to its section.
+
+P.S. Will be added a little later Unit-testing, UI testing
