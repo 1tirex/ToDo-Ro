@@ -18,26 +18,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = UINavigationController(rootViewController: TaskListViewController())
+        window?.rootViewController = UINavigationController(rootViewController: StartViewController())
         window?.makeKeyAndVisible()
         
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//        if let loggedUsername = UserDefaults.standard.string(forKey: "username") {
+//            let mainTabBarController = storyboard.instantiateViewController(identifier: "MainTabBarController")
+//            window?.rootViewController = mainTabBarController
+//        } else {
+//            let loginNavController = storyboard.instantiateViewController(identifier: "LoginNavigationController")
+//            window?.rootViewController = loginNavController
+//        }
     }
-
-    func sceneDidDisconnect(_ scene: UIScene) {
+    
+    func changeRootViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard let window = window else { return }
+        
+        window.rootViewController = vc
+        
+        UIView.transition(with: window,
+                             duration: 0.5,
+                          options: [.transitionFlipFromLeft],
+                             animations: nil,
+                             completion: nil)
     }
-
-    func sceneDidBecomeActive(_ scene: UIScene) {
-    }
-
-    func sceneWillResignActive(_ scene: UIScene) {
-    }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-    }
-
-
 }
 

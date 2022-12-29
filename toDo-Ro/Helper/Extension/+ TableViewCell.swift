@@ -18,15 +18,14 @@ extension UITableViewCell {
         content.text = taskList.name
         
         if taskList.tasks?.count == 0 {
-            content.secondaryText = "0"
             accessoryType = .none
         } else if currentTasks.isEmpty {
-            content.secondaryText = nil
             accessoryType = .checkmark
         } else {
-            content.secondaryText = currentTasks.count.formatted()
             accessoryType = .none
         }
+        
+        content.secondaryText = "\(currentTasks.count) current tasks. Create list \(taskList.date.formatted())"
         contentConfiguration = content
     }
 }

@@ -41,7 +41,7 @@ final class TasksViewModel: TasksViewModelProtocol {
     var currentTasks: Box<[Task]>
     var completedTasks: Box<[Task]>
     
-    private var taskList: TaskLists!
+    private let taskList: TaskLists
     
     init(taskList: TaskLists) {
         self.taskList = taskList

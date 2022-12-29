@@ -12,13 +12,11 @@ class TaskListViewController: UIViewController {
     // MARK: Visual Components
     private var alert = UIAlertController()
     private var addButton = UIBarButtonItem()
-    private var editButton = UIBarButtonItem()
     private var sortNameButton = UIButton()
     private var sortDateButton = UIButton()
-//    private var imageViewForButton = UIImageView()
-    private lazy var segmentControl = UISegmentedControl(items: viewModel.itemsSegmentController)
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
+    private let backgroundImage = UIImageView()
     // MARK: Private Properties
     private var viewModel: TaskListViewModelProtocol! {
         didSet {
@@ -47,26 +45,18 @@ class TaskListViewController: UIViewController {
     @objc private func pushEditAction() {
         if tableView.isEditing {
             tableView.setEditing(false, animated: true)
-            editButton.title = "Edit"
+            editButtonItem.title = "Edit"
             addButton.isEnabled = true
         } else {
             tableView.setEditing(true, animated: true)
-            editButton.title = "Done"
+            editButtonItem.title = "Done"
             addButton.isEnabled = false
         }
     }
     
-    @objc func segmentAction(_ segmentedControl: UISegmentedControl) {
-        viewModel.sortTaskList(segment: segmentedControl.selectedSegmentIndex) { [unowned self] in
-            tableView.reloadData()
-        }
-    }
-    
     @objc private func pushSortAction(_ sender: UIButton) {
+        viewModel.sortButtonPressed()
         sortingNameButton(sender)
-        viewModel.sortTaskList(segment: 1) { [unowned self] in
-            tableView.reloadData()
-        }
     }
     
     @objc func handleIn(_ sender: UIButton) {
@@ -79,13 +69,13 @@ class TaskListViewController: UIViewController {
     
     // MARK: Private Methods
     private func setupUI() {
-        addSubviews(tableView, segmentControl, sortDateButton, sortNameButton)
+        addSubviews(tableView, sortDateButton, sortNameButton, backgroundImage)
         setBackgroundColor()
         setupTableView()
-        setupSegmentControl()
         setupNavigationBar()
         setupSortButton()
         setupSortDateButton()
+        setupBackgroundImage()
         makeSystem(sortNameButton)
         makeSystem(sortDateButton)
     }
@@ -99,16 +89,24 @@ class TaskListViewController: UIViewController {
     
     private func setBackgroundColor() {
         view.backgroundColor =
-        UIColor { traitCollection in
+        UIColor { [unowned self] traitCollection in
             switch traitCollection.userInterfaceStyle {
             case .dark:
+                self.backgroundImage.image = UIImage(named: "ObjectDark")
                 return UIColor.systemBackground
             default:
+                self.backgroundImage.image = UIImage(named: "OBJECTS")
                 return UIColor.systemGray6
             }
         }
     }
     
+    private func setupBackgroundImage() {
+        NSLayoutConstraint.activate([
+            backgroundImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
     private func setupTableView() {
         tableView.register(UITableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
@@ -119,27 +117,6 @@ class TaskListViewController: UIViewController {
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
-    }
-    
-    private func setupSegmentControl() {
-        segmentControl.selectedSegmentIndex = 0
-        segmentControl.layer.cornerRadius = 10
-        segmentControl.layer.borderColor = .none
-        segmentControl.layer.masksToBounds = true
-        
-        segmentControl.isHidden = true
-        
-        segmentControl.addTarget(
-            self,
-            action: #selector(segmentAction(_:)),
-            for: .valueChanged
-        )
-        
-        NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
@@ -164,11 +141,8 @@ class TaskListViewController: UIViewController {
             target: self,
             action: #selector(pushAddAction))
         
-        editButton.action = #selector(pushEditAction)
-        editButton.title = "Edit"
-        editButton.target = self
-        
-        navigationItem.rightBarButtonItems = [addButton, editButton]
+        editButtonItem.action = #selector(pushEditAction)
+        navigationItem.rightBarButtonItems = [addButton, editButtonItem]
     }
     
     private func setupButton(_ sender: UIButton) {
@@ -214,12 +188,6 @@ class TaskListViewController: UIViewController {
         ])
     }
     
-//    private func setupImageView(status: Bool) -> UIImage? {
-//        var imageViewForButton = UIImageView()
-//        imageViewForButton.image = swapArrowButton(status: status)
-//        return swapArrowButton(status: status) //imageViewForButton.image //?.withRenderingMode(.alwaysTemplate)
-//    }
-    
     private func swapArrowButton(status: Bool) -> UIImage? {
         status
         ? UIImage(named: "downArrow")?.withRenderingMode(.alwaysTemplate)
@@ -227,34 +195,34 @@ class TaskListViewController: UIViewController {
     }
     
     private func sortingNameButton(_ sender: UIButton) {
+        defoltButtonView(sortDateButton)
+        defoltButtonView(sortNameButton)
+        
         switch sender {
         case sortNameButton:
-            sortDateButton.setImage(nil, for: .normal)
-            sortDateButton.setTitleColor(.label, for: .normal)
-        case sortDateButton:
-            sortNameButton.setImage(nil, for: .normal)
-            sortNameButton.setTitleColor(.label, for: .normal)
+            viewModel.sortTaskList(type: .name, status: viewModel.status.value) { [unowned self] in
+                tableView.reloadData()
+            }
         default:
-            print("lol")
+            viewModel.sortTaskList(type: .date, status: viewModel.status.value) { [unowned self] in
+                tableView.reloadData()
+            }
         }
-
-        if sender.currentTitleColor == .blue {
-            sender.setImage(swapArrowButton(status: true), for: .normal)
-            sender.setTitleColor(.red, for: .normal)
-            sender.imageView?.tintColor = .red
-
-        } else {
-            sender.setImage(swapArrowButton(status: false), for: .normal)
-            sender.setTitleColor(.blue, for: .normal)
-            sender.imageView?.tintColor = .blue
-        }
+        sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
+        sender.imageView?.tintColor = .label
+    }
+    
+    private func defoltButtonView(_ button: UIButton) {
+        button.setImage(nil, for: .normal)
+        button.setTitleColor(.label, for: .normal)
     }
     
     private func save(taskName: String) {
         viewModel.saveNew(taskList: taskName) { [unowned self] taskList in
-            tableView.insertSections(IndexSet(integer: viewModel.numberOfSection() - 1), with: .automatic)
+            tableView.insertSections(IndexSet(integer: viewModel.numberOfSection - 1), with: .automatic)
         }
     }
+    
     private func makeSystem(_ button: UIButton) {
         button.addTarget(self, action: #selector(handleIn(_:)), for: [
             .touchDown,
@@ -274,11 +242,21 @@ class TaskListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension TaskListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.numberOfSection()
+        if viewModel.numberOfSection == 0 {
+            sortNameButton.isHidden = true
+            sortDateButton.isHidden = true
+            backgroundImage.isHidden = false
+            return 0
+        } else {
+            backgroundImage.isHidden = true
+            sortNameButton.isHidden = false
+            sortDateButton.isHidden = false
+            return viewModel.numberOfSection
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfRows()
+        viewModel.numberOfRows
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -350,12 +328,13 @@ extension TaskListViewController: UITextFieldDelegate {
 extension TaskListViewController {
     private func showAlert(with taskList: TaskLists? = nil, completion: (() -> Void)? = nil) {
         
-        let title = taskList != nil ? "Edit List" : "New List"
+        alert = UIAlertController.createAlert(
+            withTitle: viewModel.titleForAlert(taskList),
+            andMessage: "Please set title for new task list")
         
-        alert = UIAlertController.createAlert(withTitle: title,
-                                              andMessage: "Please set title for new task list")
-        
-        alert.action(with: taskList, for: alert, delegate: self) { [unowned self] newValue in
+        alert.action(with: taskList,
+                     for: alert,
+                     delegate: self) { [unowned self] newValue in
             
             if let taskList = taskList, let completion = completion {
                 self.viewModel.editTaskList(taskList, newValue: newValue)

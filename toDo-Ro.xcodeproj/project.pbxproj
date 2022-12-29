@@ -26,7 +26,16 @@
 		514E9B9B2951DF8D00C9D5DA /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B9A2951DF8D00C9D5DA /* StorageManager.swift */; };
 		515C1D9E295341480063F16D /* TasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1D9D295341480063F16D /* TasksViewModel.swift */; };
 		515C1DA5295354E70063F16D /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1DA4295354E70063F16D /* Box.swift */; };
-		515C1DA72953569F0063F16D /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1DA62953569F0063F16D /* TaskListViewModel.swift */; };
+		515C1DA72953569F0063F16D /* TaskListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1DA62953569F0063F16D /* TaskListCellViewModel.swift */; };
+		A3CE8B9F295DD9C0004C1A69 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = A3CE8B9E295DD9C0004C1A69 /* SwiftyGif */; };
+		A3CE8BA4295DDD33004C1A69 /* load.gif in Resources */ = {isa = PBXBuildFile; fileRef = A3CE8BA3295DDD33004C1A69 /* load.gif */; };
+		A3CE8BA7295DDD82004C1A69 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CE8BA6295DDD82004C1A69 /* StartViewController.swift */; };
+		A3CE8BA9295DDDEA004C1A69 /* + Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CE8BA8295DDDEA004C1A69 /* + Gif.swift */; };
+		A3CE8BAB295DDE36004C1A69 /* + UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CE8BAA295DDE36004C1A69 /* + UIView.swift */; };
+		A3CE8BAD295DE86B004C1A69 /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = A3CE8BAC295DE86A004C1A69 /* loading.gif */; };
+		A3CE8BAF295DFB94004C1A69 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = A3CE8BAE295DFB93004C1A69 /* loader.gif */; };
+		A3CE8BB1295DFD1A004C1A69 /* first.gif in Resources */ = {isa = PBXBuildFile; fileRef = A3CE8BB0295DFD1A004C1A69 /* first.gif */; };
+		A3CE8BB3295DFE47004C1A69 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3CE8BB2295DFE47004C1A69 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +79,15 @@
 		514E9B9A2951DF8D00C9D5DA /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		515C1D9D295341480063F16D /* TasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewModel.swift; sourceTree = "<group>"; };
 		515C1DA4295354E70063F16D /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
-		515C1DA62953569F0063F16D /* TaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewModel.swift; sourceTree = "<group>"; };
+		515C1DA62953569F0063F16D /* TaskListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListCellViewModel.swift; sourceTree = "<group>"; };
+		A3CE8BA3295DDD33004C1A69 /* load.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = load.gif; sourceTree = "<group>"; };
+		A3CE8BA6295DDD82004C1A69 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		A3CE8BA8295DDDEA004C1A69 /* + Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+ Gif.swift"; sourceTree = "<group>"; };
+		A3CE8BAA295DDE36004C1A69 /* + UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+ UIView.swift"; sourceTree = "<group>"; };
+		A3CE8BAC295DE86A004C1A69 /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
+		A3CE8BAE295DFB93004C1A69 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
+		A3CE8BB0295DFD1A004C1A69 /* first.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = first.gif; sourceTree = "<group>"; };
+		A3CE8BB2295DFE47004C1A69 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3CE8B9F295DD9C0004C1A69 /* SwiftyGif in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +121,8 @@
 			children = (
 				5118346B2951E762000902F4 /* + AlertController.swift */,
 				51183470295221C4000902F4 /* + TableViewCell.swift */,
+				A3CE8BA8295DDDEA004C1A69 /* + Gif.swift */,
+				A3CE8BAA295DDE36004C1A69 /* + UIView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -182,6 +202,7 @@
 		514E9B982951DF4400C9D5DA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A3CE8BA5295DDD62004C1A69 /* LoadScreen */,
 				514E9B992951DF4E00C9D5DA /* TaskList */,
 				5118346D2951EB82000902F4 /* Tasks */,
 			);
@@ -192,7 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				514E9B602951D3A500C9D5DA /* TaskListViewController.swift */,
-				515C1DA62953569F0063F16D /* TaskListViewModel.swift */,
+				515C1DA62953569F0063F16D /* TaskListCellViewModel.swift */,
 			);
 			path = TaskList;
 			sourceTree = "<group>";
@@ -218,6 +239,7 @@
 		515C1DA1295349720063F16D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A3CE8BA0295DDCDB004C1A69 /* Gif */,
 				514E9B682951D3A800C9D5DA /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -227,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				514E9B6A2951D3A800C9D5DA /* LaunchScreen.storyboard */,
+				A3CE8BB2295DFE47004C1A69 /* Launch Screen.storyboard */,
 			);
 			path = StoryBoards;
 			sourceTree = "<group>";
@@ -238,6 +261,25 @@
 				515C1DA4295354E70063F16D /* Box.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		A3CE8BA0295DDCDB004C1A69 /* Gif */ = {
+			isa = PBXGroup;
+			children = (
+				A3CE8BB0295DFD1A004C1A69 /* first.gif */,
+				A3CE8BAE295DFB93004C1A69 /* loader.gif */,
+				A3CE8BAC295DE86A004C1A69 /* loading.gif */,
+				A3CE8BA3295DDD33004C1A69 /* load.gif */,
+			);
+			path = Gif;
+			sourceTree = "<group>";
+		};
+		A3CE8BA5295DDD62004C1A69 /* LoadScreen */ = {
+			isa = PBXGroup;
+			children = (
+				A3CE8BA6295DDD82004C1A69 /* StartViewController.swift */,
+			);
+			path = LoadScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,6 +298,9 @@
 			dependencies = (
 			);
 			name = "toDo-Ro";
+			packageProductDependencies = (
+				A3CE8B9E295DD9C0004C1A69 /* SwiftyGif */,
+			);
 			productName = "toDo-Ro";
 			productReference = 514E9B592951D3A500C9D5DA /* toDo-Ro.app */;
 			productType = "com.apple.product-type.application";
@@ -328,6 +373,9 @@
 				Base,
 			);
 			mainGroup = 514E9B502951D3A500C9D5DA;
+			packageReferences = (
+				A3CE8B9D295DD9C0004C1A69 /* XCRemoteSwiftPackageReference "SwiftyGif" */,
+			);
 			productRefGroup = 514E9B5A2951D3A500C9D5DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -345,7 +393,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				514E9B6C2951D3A800C9D5DA /* LaunchScreen.storyboard in Resources */,
+				A3CE8BB1295DFD1A004C1A69 /* first.gif in Resources */,
+				A3CE8BAD295DE86B004C1A69 /* loading.gif in Resources */,
+				A3CE8BA4295DDD33004C1A69 /* load.gif in Resources */,
+				A3CE8BAF295DFB94004C1A69 /* loader.gif in Resources */,
 				514E9B692951D3A800C9D5DA /* Assets.xcassets in Resources */,
+				A3CE8BB3295DFE47004C1A69 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,11 +424,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				514E9B612951D3A500C9D5DA /* TaskListViewController.swift in Sources */,
+				A3CE8BA7295DDD82004C1A69 /* StartViewController.swift in Sources */,
 				515C1DA5295354E70063F16D /* Box.swift in Sources */,
-				515C1DA72953569F0063F16D /* TaskListViewModel.swift in Sources */,
+				A3CE8BAB295DDE36004C1A69 /* + UIView.swift in Sources */,
+				515C1DA72953569F0063F16D /* TaskListCellViewModel.swift in Sources */,
 				514E9B9B2951DF8D00C9D5DA /* StorageManager.swift in Sources */,
 				5118346F2951EBA0000902F4 /* TasksViewController.swift in Sources */,
 				514E9B942951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift in Sources */,
+				A3CE8BA9295DDDEA004C1A69 /* + Gif.swift in Sources */,
 				514E9B962951DD1A00C9D5DA /* Task+CoreDataClass.swift in Sources */,
 				514E9B952951DD1A00C9D5DA /* TaskLists+CoreDataProperties.swift in Sources */,
 				515C1D9E295341480063F16D /* TasksViewModel.swift in Sources */,
@@ -724,6 +780,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A3CE8B9D295DD9C0004C1A69 /* XCRemoteSwiftPackageReference "SwiftyGif" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kirualex/SwiftyGif.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A3CE8B9E295DD9C0004C1A69 /* SwiftyGif */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3CE8B9D295DD9C0004C1A69 /* XCRemoteSwiftPackageReference "SwiftyGif" */;
+			productName = SwiftyGif;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		514E9B652951D3A500C9D5DA /* toDo_Ro.xcdatamodeld */ = {
