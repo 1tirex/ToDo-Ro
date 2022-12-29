@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 protocol TaskListViewModelProtocol {
     var itemsSegmentController: [String] { get }
     var cellID: String { get }
@@ -83,21 +84,10 @@ final class TaskListViewModel: TaskListViewModelProtocol {
         }
     }
     
-    private enum TypeSort: TaskLists.Type {
-        case date, name
-    }
-    
-    func sortTaskList(segment: Int, type: TypeSort, completion: @escaping () -> Void) {
-//        taskLists = segment == 0
-//        ? taskLists.sorted(by: { $0.date < $1.date })
-//        : taskLists.sorted(by: { $0.name < $1.name })
-        type.rawValue
-        switch type {
-        case .date:
-            taskLists = taskLists.sorted(by: { $0.date < $1.date })
-        case .name:
-            taskLists = taskLists.sorted(by: { $0.name < $1.name })
-        }
+    func sortTaskList(segment: Int, completion: @escaping () -> Void) {
+        taskLists = segment == 0
+        ? taskLists.sorted(by: { $0.date < $1.date })
+        : taskLists.sorted(by: { $0.name < $1.name })
         completion()
     }
     
