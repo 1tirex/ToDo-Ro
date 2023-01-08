@@ -1,5 +1,5 @@
 # ToDo-Ro
-ToDo app  - CoreData - MVVC
+ToDo app  - CoreData - MVVM
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/210013559-d4d7b414-4394-4753-ac69-a46ee2c3d087.png"></code>
 
 Application Task List:
