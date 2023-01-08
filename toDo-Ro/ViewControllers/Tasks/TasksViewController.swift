@@ -21,7 +21,9 @@ class TasksViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-    
+}
+
+extension TasksViewController {
     // MARK: objc Action
     @objc private func addButtonPressed() {
         showAlert()
@@ -32,7 +34,7 @@ class TasksViewController: UIViewController {
         setupTableView()
         setupNavigationBar()
     }
-
+    
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: viewModel.cellID)
@@ -79,11 +81,8 @@ extension TasksViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
-        var content = cell.defaultContentConfiguration()
         let task = viewModel.getTask(from: indexPath)
-        content.text = task.name
-        content.secondaryText = task.note
-        cell.contentConfiguration = content
+        cell.configure(task: task)
         return cell
     }
 }
@@ -93,26 +92,29 @@ extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let task = viewModel.getTask(from: indexPath)
         
-        let deleteAction = UIContextualAction(style: .destructive,
-                                              title: "Delete") { [unowned self] _, _, _ in
-            viewModel.remove(from: task)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: "Delete") { [unowned self] _, _, _ in
+                viewModel.remove(from: task)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         
-        let editAction = UIContextualAction(style: .normal,
-                                            title: "Edit") { [unowned self] _, _, isDone in
-            showAlert(with: task) {
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-            }
-            isDone(true)
+        let editAction = UIContextualAction(
+            style: .normal,
+            title: "Edit") { [unowned self] _, _, isDone in
+                showAlert(with: task) {
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                isDone(true)
         }
         
-        let doneAction = UIContextualAction(style: .normal,
-                                            title: viewModel.titleForDoneAlert(for: indexPath)) { [unowned self] _, _, isDone in
-            
-            viewModel.done(task: task)
-            tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
-            isDone(true)
+        let doneAction = UIContextualAction(
+            style: .normal,
+            title: viewModel.titleForDoneAlert(for: indexPath)) { [unowned self] _, _, isDone in
+                
+                viewModel.done(task: task)
+                tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
+                isDone(true)
         }
         editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)

@@ -13,6 +13,7 @@ final class StorageManager {
     // MARK: - Core Data stack
     private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "toDo_Ro")
+        
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -26,7 +27,9 @@ final class StorageManager {
     private init() {
         viewContext = persistentContainer.viewContext
     }
-    
+}
+
+extension StorageManager {
     // MARK: - Task List
     func fetchTaskLists(completion: (Result<[TaskLists], Error>) -> Void) {
         let fetchRequest = TaskLists.fetchRequest()

@@ -8,24 +8,31 @@
 import UIKit
 
 extension UITableViewCell {
-    func configure(with taskList: TaskLists) {
-        
-        let currentTasks = StorageManager.shared
-            .fetchTasks(list: taskList)
-            .filter { $0.isComplete == false}
-        
+    func configure(with taskList: TaskLists = TaskLists(), task: Task? = nil) {
         var content = defaultContentConfiguration()
-        content.text = taskList.name
         
-        if taskList.tasks?.count == 0 {
-            accessoryType = .none
-        } else if currentTasks.isEmpty {
-            accessoryType = .checkmark
+        if let task = task {
+            content.text = task.name
+            content.secondaryText = task.note
         } else {
-            accessoryType = .none
+            let currentTasks = StorageManager.shared
+                .fetchTasks(list: taskList)
+                .filter { $0.isComplete == false}
+            
+            content.text = taskList.name
+            
+            if taskList.tasks?.count == 0 {
+                accessoryType = .none
+            } else if currentTasks.isEmpty {
+                accessoryType = .checkmark
+            } else {
+                accessoryType = .none
+            }
+            content.secondaryText = """
+            \(currentTasks.count) current tasks.
+            Create list at \(taskList.date.formatted(date: .abbreviated, time: .shortened) )
+            """
         }
-        
-        content.secondaryText = "\(currentTasks.count) current tasks. Create list \(taskList.date.formatted())"
         contentConfiguration = content
     }
 }

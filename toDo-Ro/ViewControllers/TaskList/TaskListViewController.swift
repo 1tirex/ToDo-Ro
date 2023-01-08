@@ -37,21 +37,16 @@ final class TaskListViewController: UIViewController {
         tableView.reloadData()
     }
     
+}
+
+extension TaskListViewController {
     // MARK: objc Action
     @objc private func pushAddAction() {
         showAlert()
     }
     
     @objc private func pushEditAction() {
-        if tableView.isEditing {
-            tableView.setEditing(false, animated: true)
-            editButtonItem.title = "Edit"
-            addButton.isEnabled = true
-        } else {
-            tableView.setEditing(true, animated: true)
-            editButtonItem.title = "Done"
-            addButton.isEnabled = false
-        }
+        pressedEditButton()
     }
     
     @objc private func pushSortAction(_ sender: UIButton) {
@@ -189,10 +184,16 @@ final class TaskListViewController: UIViewController {
         ])
     }
     
-    private func swapArrowButton(status: Bool) -> UIImage? {
-        status
-        ? UIImage(named: "downArrow")?.withRenderingMode(.alwaysTemplate)
-        : UIImage(named: "dowArrow")?.withRenderingMode(.alwaysTemplate)
+    private func pressedEditButton() {
+        if tableView.isEditing {
+            tableView.setEditing(false, animated: true)
+            editButtonItem.title = "Edit"
+            addButton.isEnabled = true
+        } else {
+            tableView.setEditing(true, animated: true)
+            editButtonItem.title = "Done"
+            addButton.isEnabled = false
+        }
     }
     
     private func sortingNameButton(_ sender: UIButton) {
@@ -201,26 +202,44 @@ final class TaskListViewController: UIViewController {
         
         switch sender {
         case sortNameButton:
-            viewModel.sortTaskList(type: .name, status: viewModel.status.value) { [unowned self] in
+            viewModel.sortTaskList(type: .name) { [unowned self] in
                 tableView.reloadData()
             }
         default:
-            viewModel.sortTaskList(type: .date, status: viewModel.status.value) { [unowned self] in
+            viewModel.sortTaskList(type: .date) { [unowned self] in
                 tableView.reloadData()
             }
         }
         sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
-        sender.imageView?.tintColor = .label
     }
     
     private func defoltButtonView(_ button: UIButton) {
         button.setImage(nil, for: .normal)
-        button.setTitleColor(.label, for: .normal)
+    }
+    
+    private func swapArrowButton(status: Bool) -> UIImage? {
+        status
+        ? UIImage(named: "downArrow")?.withRenderingMode(.alwaysTemplate)
+        : UIImage(named: "dowArrow")?.withRenderingMode(.alwaysTemplate)
     }
     
     private func save(taskName: String) {
         viewModel.saveNew(taskList: taskName) { [unowned self] taskList in
             tableView.insertSections(IndexSet(integer: viewModel.numberOfSection - 1), with: .automatic)
+        }
+    }
+    
+    private func itemsIsHiddenInTableView() -> Int {
+        if viewModel.numberOfSection == 0 {
+            sortNameButton.isHidden = true
+            sortDateButton.isHidden = true
+            backgroundImage.isHidden = false
+            return 0
+        } else {
+            backgroundImage.isHidden = true
+            sortNameButton.isHidden = false
+            sortDateButton.isHidden = false
+            return viewModel.numberOfSection
         }
     }
     
@@ -243,17 +262,7 @@ final class TaskListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension TaskListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.numberOfSection == 0 {
-            sortNameButton.isHidden = true
-            sortDateButton.isHidden = true
-            backgroundImage.isHidden = false
-            return 0
-        } else {
-            backgroundImage.isHidden = true
-            sortNameButton.isHidden = false
-            sortDateButton.isHidden = false
-            return viewModel.numberOfSection
-        }
+        itemsIsHiddenInTableView()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -278,28 +287,30 @@ extension TaskListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension TaskListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         let taskList = viewModel.getTaskList(for: indexPath)
         
-        let deleteAction = UIContextualAction(style: .destructive,
-                                              title: "Delete") { [unowned self] _, _, _ in
-            viewModel.delete(at: indexPath, taskList: taskList)
-            tableView.deleteSections([indexPath.section], with: .automatic)
-        }
-        
-        let editAction = UIContextualAction(style: .normal,
-                                            title: "Edit") { [unowned self] _, _, isDone in
-            showAlert(with: taskList) {
-                tableView.reloadSections([indexPath.section], with: .automatic)
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: "Delete") { [unowned self] _, _, _ in
+                viewModel.delete(at: indexPath, taskList: taskList)
+                tableView.deleteSections([indexPath.section], with: .automatic)
             }
-            isDone(true)
+        
+        let editAction = UIContextualAction(
+            style: .normal,
+            title: "Edit") { [unowned self] _, _, isDone in
+                showAlert(with: taskList) {
+                    tableView.reloadSections([indexPath.section], with: .automatic)
+                }
+                isDone(true)
         }
         
-        let doneAction = UIContextualAction(style: .normal,
-                                            title: "Done") { [unowned self] _, _, isDone in
-            viewModel.done(taskList: taskList)
-            tableView.reloadSections([indexPath.section], with: .automatic)
-            isDone(true)
+        let doneAction = UIContextualAction(
+            style: .normal,
+            title: "Done") { [unowned self] _, _, isDone in
+                viewModel.done(taskList: taskList)
+                tableView.reloadSections([indexPath.section], with: .automatic)
+                isDone(true)
         }
         
         editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)

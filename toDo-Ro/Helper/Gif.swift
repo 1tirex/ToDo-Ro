@@ -29,7 +29,9 @@ final class LogoAnimationView: UIView {
         super.init(coder: aDecoder)
         commonInit()
     }
+}
 
+extension LogoAnimationView {
     private func commonInit() {
         addSubview(logoGifImageView)
         logoGifImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true

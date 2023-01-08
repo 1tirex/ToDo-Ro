@@ -22,7 +22,7 @@ protocol TaskListViewModelProtocol {
     func done(taskList: TaskLists)
     func editTaskList(_: TaskLists, newValue: String)
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void)
-    func sortTaskList(type: TypeSort, status: Bool, completion: @escaping () -> Void)
+    func sortTaskList(type: TypeSort, completion: @escaping () -> Void)
     func getTaskViewModel(at: IndexPath) -> TasksViewModelProtocol
     func titleForAlert(_: TaskLists?) -> String
     func checkingIsEmpty(textField: String?) -> Bool
@@ -99,14 +99,14 @@ final class TaskListViewModel: TaskListViewModelProtocol {
         }
     }
     
-    func sortTaskList(type: TypeSort, status: Bool, completion: @escaping () -> Void) {
+    func sortTaskList(type: TypeSort, completion: @escaping () -> Void) {
         switch type {
         case .date:
-            taskLists = status
+            taskLists = status.value
             ? taskLists.sorted(by: { $0.date < $1.date })
             : taskLists.sorted(by: { $0.date > $1.date })
         case .name:
-            taskLists = status
+            taskLists = status.value
             ? taskLists.sorted(by: { $0.name < $1.name })
             : taskLists.sorted(by: { $0.name > $1.name })
         }
