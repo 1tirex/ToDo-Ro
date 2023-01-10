@@ -20,7 +20,7 @@ final class TaskListViewController: UIViewController {
     // MARK: Private Properties
     private var viewModel: TaskListViewModelProtocol! {
         didSet {
-            viewModel.fetchTaskList {
+            viewModel.fetchTaskList(.persistent) {
             }
         }
     }

@@ -16,7 +16,7 @@ protocol TaskListViewModelProtocol {
     var cellID: String { get }
     var numberOfSection: Int { get }
     var numberOfRows: Int { get }
-    func fetchTaskList(completion: @escaping() -> Void)
+    func fetchTaskList(_: StorageType, completion: @escaping () -> Void)
     func getTaskList(for: IndexPath) -> TaskLists
     func delete(at indexPath: IndexPath, taskList: TaskLists)
     func done(taskList: TaskLists)
@@ -55,14 +55,30 @@ final class TaskListViewModel: TaskListViewModelProtocol {
         status.value.toggle()
     }
     
-    func fetchTaskList(completion: @escaping () -> Void) {
-        StorageManager.shared.fetchTaskLists { [unowned self] result in
-            switch result {
-            case .success(let lists):
-                self.taskLists = lists
-                completion()
-            case .failure(let error):
-                print(error.localizedDescription)
+    func fetchTaskList(_ storageType: StorageType = .inMemory, completion: @escaping () -> Void) {
+        switch storageType {
+        case .persistent:
+            StorageManager.shared.fetchTaskLists { [unowned self] result in
+                switch result {
+                case .success(let lists):
+                    self.taskLists = lists
+                    completion()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        case .inMemory:
+            let temporaryStorage = StorageManager(modelName: "toDo_Ro", .inMemory)
+            temporaryStorage.saveTaskList(name: "foo") {_ in }
+            temporaryStorage.saveTaskList(name: "bar") {_ in }
+            temporaryStorage.fetchTaskLists { [unowned self] result in
+                switch result {
+                case .success(let lists):
+                    self.taskLists = lists
+                    completion()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
             }
         }
     }

@@ -52,7 +52,7 @@ extension TaskListsTests {
         coreData.fetchTaskLists { result in
             switch result {
             case .success(let TaskLists):
-                XCTAssertNotNil(TaskLists)
+                XCTAssert(!TaskLists.isEmpty)
                 taskLists = TaskLists
             case .failure(let error):
                 XCTAssertNil(error, "Save did not occur")
@@ -120,14 +120,14 @@ extension TaskListsTests {
             task = Task
         }
         
-        XCTAssertEqual(task.isComplete, false)
+        XCTAssertFalse(task.isComplete)
         XCTAssertEqual(taskLists.tasks?.count, 1)
         
         //When
         coreData.doneTaskList(taskLists)
         
         //Then
-        XCTAssertEqual(task.isComplete, true)
+        XCTAssertTrue(task.isComplete)
         XCTAssertEqual(taskLists.tasks?.count, 1)
     }
     
