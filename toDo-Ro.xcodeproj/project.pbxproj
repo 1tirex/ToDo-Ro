@@ -16,7 +16,7 @@
 		514E9B672951D3A500C9D5DA /* toDo_Ro.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B652951D3A500C9D5DA /* toDo_Ro.xcdatamodeld */; };
 		514E9B692951D3A800C9D5DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514E9B682951D3A800C9D5DA /* Assets.xcassets */; };
 		514E9B6C2951D3A800C9D5DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514E9B6A2951D3A800C9D5DA /* LaunchScreen.storyboard */; };
-		514E9B772951D3A900C9D5DA /* ToDoRoCoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B762951D3A900C9D5DA /* ToDoRoCoreDataTests.swift */; };
+		514E9B772951D3A900C9D5DA /* TaskListsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B762951D3A900C9D5DA /* TaskListsTests.swift */; };
 		514E9B812951D3A900C9D5DA /* toDo_RoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B802951D3A900C9D5DA /* toDo_RoUITests.swift */; };
 		514E9B832951D3A900C9D5DA /* toDo_RoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B822951D3A900C9D5DA /* toDo_RoUITestsLaunchTests.swift */; };
 		514E9B942951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514E9B902951DD1A00C9D5DA /* TaskLists+CoreDataClass.swift */; };
@@ -65,7 +65,7 @@
 		514E9B6B2951D3A800C9D5DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		514E9B6D2951D3A800C9D5DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		514E9B722951D3A900C9D5DA /* toDo-RoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toDo-RoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		514E9B762951D3A900C9D5DA /* ToDoRoCoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoRoCoreDataTests.swift; sourceTree = "<group>"; };
+		514E9B762951D3A900C9D5DA /* TaskListsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListsTests.swift; sourceTree = "<group>"; };
 		514E9B7C2951D3A900C9D5DA /* toDo-RoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toDo-RoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		514E9B802951D3A900C9D5DA /* toDo_RoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toDo_RoUITests.swift; sourceTree = "<group>"; };
 		514E9B822951D3A900C9D5DA /* toDo_RoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = toDo_RoUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -166,8 +166,8 @@
 		514E9B752951D3A900C9D5DA /* toDo-RoTests */ = {
 			isa = PBXGroup;
 			children = (
-				514E9B762951D3A900C9D5DA /* ToDoRoCoreDataTests.swift */,
-				A3CE8BB4295E0E27004C1A69 /* TaskTests.swift */,
+				A379179E296DCAA100BCF84A /* TestViewModels */,
+				A379179D296DCA7E00BCF84A /* TestCoreData */,
 			);
 			path = "toDo-RoTests";
 			sourceTree = "<group>";
@@ -255,6 +255,22 @@
 				A3CE8BA8295DDDEA004C1A69 /* Gif.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		A379179D296DCA7E00BCF84A /* TestCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				514E9B762951D3A900C9D5DA /* TaskListsTests.swift */,
+				A3CE8BB4295E0E27004C1A69 /* TaskTests.swift */,
+			);
+			path = TestCoreData;
+			sourceTree = "<group>";
+		};
+		A379179E296DCAA100BCF84A /* TestViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TestViewModels;
 			sourceTree = "<group>";
 		};
 		A3CE8BA0295DDCDB004C1A69 /* Gif */ = {
@@ -436,7 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3CE8BB5295E0E27004C1A69 /* TaskTests.swift in Sources */,
-				514E9B772951D3A900C9D5DA /* ToDoRoCoreDataTests.swift in Sources */,
+				514E9B772951D3A900C9D5DA /* TaskListsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

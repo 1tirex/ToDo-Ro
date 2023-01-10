@@ -7,25 +7,54 @@
 
 import CoreData
 
+enum StorageType {
+  case persistent, inMemory
+}
+
 final class StorageManager {
-    static let shared = StorageManager()
+    static let shared = StorageManager(modelName: "toDo_Ro")
     
     // MARK: - Core Data stack
-    private let persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "toDo_Ro")
-        
-        container.loadPersistentStores { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+//    private let persistentContainer: NSPersistentContainer = {
+//        let container = NSPersistentContainer(name: "toDo_Ro")
+//
+//        container.loadPersistentStores { _, error in
+//            if let error = error as NSError? {
+//                fatalError("Unresolved error \(error), \(error.userInfo)")
+//            }
+//        }
+//        return container
+//    }()
+    
+//    private let viewContext: NSManagedObjectContext
+    
+//    private init() {
+//        viewContext = persistentContainer.viewContext
+//    }
+    
+    private let persistentContainer: NSPersistentContainer
+    private var viewContext: NSManagedObjectContext {
+        persistentContainer.viewContext
+    }
+    
+    
+    init(modelName: String, _ storageType: StorageType = .persistent) {
+        persistentContainer = {
+            let container = NSPersistentContainer(name: modelName)
+            
+            if storageType == .inMemory {
+                let description = NSPersistentStoreDescription()
+                description.url = URL(fileURLWithPath: "/dev/null")
+                container.persistentStoreDescriptions = [description]
             }
-        }
-        return container
-    }()
-    
-    private let viewContext: NSManagedObjectContext
-    
-    private init() {
-        viewContext = persistentContainer.viewContext
+            
+            container.loadPersistentStores { _, error in
+                if let error = error as NSError? {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
+            }
+            return container
+        }()
     }
 }
 
