@@ -27,6 +27,7 @@
 		515C1D9E295341480063F16D /* TasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1D9D295341480063F16D /* TasksViewModel.swift */; };
 		515C1DA5295354E70063F16D /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1DA4295354E70063F16D /* Box.swift */; };
 		515C1DA72953569F0063F16D /* TaskListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515C1DA62953569F0063F16D /* TaskListCellViewModel.swift */; };
+		A32605C4297092D4000B7114 /* Ractagle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32605C3297092D4000B7114 /* Ractagle.swift */; };
 		A37917A2296DCC6C00BCF84A /* TestTaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37917A1296DCC6C00BCF84A /* TestTaskListViewModel.swift */; };
 		A37917A6296DCD0F00BCF84A /* TestTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37917A5296DCD0F00BCF84A /* TestTasksViewModel.swift */; };
 		A3CE8B9F295DD9C0004C1A69 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = A3CE8B9E295DD9C0004C1A69 /* SwiftyGif */; };
@@ -79,6 +80,7 @@
 		515C1D9D295341480063F16D /* TasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewModel.swift; sourceTree = "<group>"; };
 		515C1DA4295354E70063F16D /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		515C1DA62953569F0063F16D /* TaskListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListCellViewModel.swift; sourceTree = "<group>"; };
+		A32605C3297092D4000B7114 /* Ractagle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ractagle.swift; sourceTree = "<group>"; };
 		A37917A1296DCC6C00BCF84A /* TestTaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestTaskListViewModel.swift; path = "toDo-RoTests/TestViewModels/TestTaskListViewModel.swift"; sourceTree = SOURCE_ROOT; };
 		A37917A5296DCD0F00BCF84A /* TestTasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTasksViewModel.swift; sourceTree = "<group>"; };
 		A3CE8BA6295DDD82004C1A69 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				5118346A2951E74F000902F4 /* Extension */,
 				515C1DA4295354E70063F16D /* Box.swift */,
 				A3CE8BA8295DDDEA004C1A69 /* Gif.swift */,
+				A32605C3297092D4000B7114 /* Ractagle.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				514E9B5D2951D3A500C9D5DA /* AppDelegate.swift in Sources */,
 				5118346C2951E762000902F4 /* + AlertController.swift in Sources */,
 				514E9B672951D3A500C9D5DA /* toDo_Ro.xcdatamodeld in Sources */,
+				A32605C4297092D4000B7114 /* Ractagle.swift in Sources */,
 				514E9B972951DD1A00C9D5DA /* Task+CoreDataProperties.swift in Sources */,
 				51183471295221C4000902F4 /* + TableViewCell.swift in Sources */,
 				514E9B5F2951D3A500C9D5DA /* SceneDelegate.swift in Sources */,

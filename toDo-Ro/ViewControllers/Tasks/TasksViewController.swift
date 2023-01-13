@@ -29,6 +29,10 @@ extension TasksViewController {
         showAlert()
     }
     
+    @objc private func pushEditAction() {
+        pressedEditButton()
+    }
+    
     // MARK: Private Methods
     private func setupUI() {
         setupTableView()
@@ -61,7 +65,22 @@ extension TasksViewController {
             target: self,
             action: #selector(addButtonPressed))
         
+        editButtonItem.action = #selector(pushEditAction)
         navigationItem.rightBarButtonItems = [addButton, editButtonItem]
+    }
+    
+    private func pressedEditButton() {
+        let addButton = navigationItem.rightBarButtonItems?.first { $0.action == #selector(addButtonPressed) }
+        
+        if tableView.isEditing {
+            tableView.setEditing(false, animated: true)
+            addButton?.isEnabled = true
+            editButtonItem.title = "Edit"
+        } else {
+            tableView.setEditing(true, animated: true)
+            addButton?.isEnabled = false
+            editButtonItem.title = "Done"
+        }
     }
 }
 
