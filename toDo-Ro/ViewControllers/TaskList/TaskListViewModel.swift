@@ -13,7 +13,7 @@ enum TypeSort {
 
 protocol TaskListViewModelProtocol {
     var status: Box<Bool> { get }
-    var cellID: String { get }
+//    var cellID: String { get }
     var numberOfSection: Int { get }
     var numberOfRows: Int { get }
     func fetchTaskList(_: StorageType, completion: @escaping () -> Void)
@@ -24,6 +24,7 @@ protocol TaskListViewModelProtocol {
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void)
     func sortTaskList(type: TypeSort, completion: @escaping () -> Void)
     func getTaskViewModel(at: IndexPath) -> TasksViewModelProtocol
+    func getTaskListCellViewModel(at: IndexPath) -> TaskListCellViewModelProtocol
     func titleForAlert(_: TaskLists?) -> String
     func checkingIsEmpty(textField: String?) -> Bool
     func sortButtonPressed()
@@ -33,9 +34,9 @@ final class TaskListViewModel: TaskListViewModelProtocol {
     
     var status: Box<Bool>
     
-    var cellID: String {
-        "cell"
-    }
+//    var cellID: String {
+//        "cell"
+//    }
     
     var numberOfSection: Int {
         taskLists.count
@@ -106,6 +107,10 @@ final class TaskListViewModel: TaskListViewModelProtocol {
     
     func getTaskViewModel(at indexPath: IndexPath) -> TasksViewModelProtocol {
         TasksViewModel(taskList: taskLists[indexPath.section])
+    }
+    
+    func getTaskListCellViewModel(at indexPath: IndexPath) -> TaskListCellViewModelProtocol {
+        TaskListCellViewModel(taskList: taskLists[indexPath.section])
     }
     
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void) {

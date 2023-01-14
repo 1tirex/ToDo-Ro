@@ -36,7 +36,6 @@ final class TaskListViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
-    
 }
 
 extension TaskListViewController {
@@ -104,9 +103,10 @@ extension TaskListViewController {
     }
     
     private func setupTableView() {
-        tableView.register(UITableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
+        tableView.register(TaskListTableViewCell.self,forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = 80
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: sortNameButton.bottomAnchor, constant: 20),
@@ -202,12 +202,16 @@ extension TaskListViewController {
         
         switch sender {
         case sortNameButton:
-            viewModel.sortTaskList(type: .name) { [unowned self] in
-                tableView.reloadData()
+            viewModel.sortTaskList(type: .name) {
+                DispatchQueue.main.async { [unowned self] in
+                    tableView.reloadData()
+                }
             }
         default:
-            viewModel.sortTaskList(type: .date) { [unowned self] in
-                tableView.reloadData()
+            viewModel.sortTaskList(type: .date) {
+                DispatchQueue.main.async { [unowned self] in
+                    tableView.reloadData()
+                }
             }
         }
         sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
@@ -278,9 +282,16 @@ extension TaskListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
-        cell.configure(with: viewModel.getTaskList(for: indexPath))
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = cell as? TaskListTableViewCell else { return UITableViewCell() }
+        cell.viewModel = viewModel.getTaskListCellViewModel(at: indexPath)
+//        cell.configure()
         return cell
+        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
+        
+//        cell.configure(with: viewModel.getTaskList(for: indexPath))
+//        return cell
     }
 }
 

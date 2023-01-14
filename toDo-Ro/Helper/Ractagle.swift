@@ -17,7 +17,6 @@ class RatingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         initSubviews()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -28,69 +27,77 @@ class RatingView: UIView {
     private func initSubviews() {
         self.backgroundColor = .clear
         
-        initPercentageLabel()
+//        initPercentageLabel()
         initPercentageLabelNumber()
-
     }
     
     private func initPercentageLabel() {
-        
         labelPercentage = UILabel()
         labelPercentage.font = UIFont.systemFont(ofSize: 6)
         labelPercentage.textColor = .white
         labelPercentage.backgroundColor = .clear
         labelPercentage.textAlignment = .center
         labelPercentage.text = "%"
+        
         //Add subview
-        self.labelPercentage.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
-        self.addSubview(self.labelPercentage)
+        labelPercentage.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: 10,
+                                      height: 10)
+        addSubview(labelPercentage)
+        
         //Autolayout
-        self.labelPercentage.translatesAutoresizingMaskIntoConstraints = false
+        labelPercentage.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
             self.labelPercentage.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
             self.labelPercentage.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -2),
             self.labelPercentage.heightAnchor.constraint(equalToConstant: 10),
             self.labelPercentage.widthAnchor.constraint(equalToConstant: 10)
         ]
-        
         NSLayoutConstraint.activate(constraints)
     }
     
     private func initPercentageLabelNumber() {
-        
         labelPercentageNumber = UILabel()
         labelPercentageNumber.font = UIFont.systemFont(ofSize: 15)
         labelPercentageNumber.textColor = .white
         labelPercentageNumber.backgroundColor = .clear
         labelPercentageNumber.textAlignment = .center
         
-        self.labelPercentageNumber.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.width)
-        self.addSubview(self.labelPercentageNumber)
         
-        self.labelPercentageNumber.translatesAutoresizingMaskIntoConstraints = false
+        labelPercentageNumber.frame = CGRect(x: 0,
+                                             y: 0,
+                                             width: 20,
+                                             height: 20)
+        addSubview(labelPercentageNumber)
+        
+        labelPercentageNumber.translatesAutoresizingMaskIntoConstraints = false
         let constraints = [
-            self.labelPercentageNumber.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
-            self.labelPercentageNumber.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
-            self.labelPercentageNumber.heightAnchor.constraint(equalToConstant: bounds.width),
-            self.labelPercentageNumber.widthAnchor.constraint(equalToConstant: bounds.width)
+            labelPercentageNumber.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
+            labelPercentageNumber.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
+            labelPercentageNumber.heightAnchor.constraint(equalToConstant: 10),
+            labelPercentageNumber.widthAnchor.constraint(equalToConstant: 10)
             
         ]
-        
         NSLayoutConstraint.activate(constraints)
-
     }
     
-    func updateCirclePercentage(percent: Double) {
+    func updateCirclePercentage(percent: Double, count: Int) {
         // round view
         if roundView != nil {
             return
         }
-        roundView = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+        roundView = UIView(frame: CGRect(x: 0,
+                                         y: 0,
+                                         width: 50,
+                                         height: 50))
+        
         roundView.backgroundColor = .clear
         roundView.layer.cornerRadius = roundView.frame.size.width / 2
 
         // bezier path
-        let circlePath = UIBezierPath(arcCenter: CGPoint (x: roundView.frame.size.width / 2, y: roundView.frame.size.height / 2),
+        let circlePath = UIBezierPath(arcCenter: CGPoint (x: roundView.frame.size.width / 2,
+                                                          y: roundView.frame.size.height / 2),
                                       radius: roundView.frame.size.width / 2,
                                       startAngle: CGFloat(-0.5 * .pi),
                                       endAngle: CGFloat(1.5 * .pi),
@@ -99,7 +106,9 @@ class RatingView: UIView {
         // circle shape background 100%. Alpha color 0.3
         let circleShapeBackground = CAShapeLayer()
         circleShapeBackground.path = circlePath.cgPath
-        circleShapeBackground.strokeColor = (percent > 0.5) ? UIColor.green.withAlphaComponent(0.3).cgColor : UIColor.yellow.withAlphaComponent(0.3).cgColor
+        circleShapeBackground.strokeColor = (percent > 0.5)
+        ? UIColor.systemPink.cgColor //.withAlphaComponent(0.3).cgColor
+        : UIColor.systemMint.cgColor //.withAlphaComponent(0.3).cgColor
         circleShapeBackground.fillColor = UIColor.clear.cgColor
         circleShapeBackground.lineWidth = 2.5
         // set start and end values
@@ -110,7 +119,9 @@ class RatingView: UIView {
         // circle shape percentage
         let circleShape = CAShapeLayer()
         circleShape.path = circlePath.cgPath
-        circleShape.strokeColor = (percent > 0.5) ? UIColor.green.cgColor : UIColor.yellow.cgColor
+        circleShape.strokeColor = (percent > 0.5)
+        ? UIColor.systemMint.cgColor
+        : UIColor.systemPink.cgColor
         circleShape.fillColor = UIColor.clear.cgColor
         circleShape.lineWidth = 2.5
         // set start and end values
@@ -124,7 +135,7 @@ class RatingView: UIView {
         self.addSubview(roundView)
         
         //Update percentage value
-        let percentValue  = (percent*10).rounded()
-        labelPercentageNumber.text = String(format: "%.0f", percentValue)
+//        let percentValue  = (percent*10).rounded()
+        labelPercentageNumber.text = "\(count)"
     }
 }
