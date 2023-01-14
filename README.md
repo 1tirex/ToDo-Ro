@@ -1,6 +1,8 @@
 # ToDo-Ro
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/210013559-d4d7b414-4394-4753-ac69-a46ee2c3d087.png"></code>
 
+<img align="right" alt="GIF" src="https://user-images.githubusercontent.com/108235206/211651526-f1a68b20-b12d-4ade-8821-2ce1b58913d0.gif?raw=true" width="250" />
+
 Application Task List:
 - memory CoreDate
 - architectural pattern MVVM
@@ -15,6 +17,9 @@ Application Task List:
 - the main screen displays the number of uncompleted tasks and date create. 
 - When you click complete, all tasks will automatically go to the status completed
 - Without StoryBoard and XIB, only programmatically
+- Adding Unit-tests for CoreData, First screen, Second screen
+- Gif on startup after the launch screen (transition from static screen to app screen is not visible). Exemple ->
+
 
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/210013534-e555cba7-27b6-4cdb-96bd-b8c63491a0eb.png"></code>
 
