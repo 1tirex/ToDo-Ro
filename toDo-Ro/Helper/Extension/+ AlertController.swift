@@ -13,16 +13,14 @@ extension UIAlertController {
     }
     
     static func createAlert(withTitle title: String, andMessage message: String) -> UIAlertController {
-            
         UIAlertController(
             title: title,
             message: message,
             preferredStyle: .alert)
     }
     
-    // MARK: - taskList
+    // MARK: taskList
     func action(with taskList: TaskLists?, for alert: UIAlertController, delegate: UITextFieldDelegate? = nil, completion: @escaping (String) -> Void) {
-                
         let saveAction = saveAction(
             for: .taskList,
             taskList: taskList,
@@ -30,7 +28,8 @@ extension UIAlertController {
             completion(newValue)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        let cancelAction = UIAlertAction(title: "Cancel",
+                                         style: .destructive)
         
         alert.addAction(cancelAction)
         alert.addAction(saveAction)

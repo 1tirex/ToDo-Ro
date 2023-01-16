@@ -104,7 +104,7 @@ extension TaskListViewController {
     }
     
     private func setupTableView() {
-        tableView.register(UITableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
+        tableView.register(TableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -200,14 +200,20 @@ extension TaskListViewController {
         defoltButtonView(sortDateButton)
         defoltButtonView(sortNameButton)
         
+        self.tableView.reloadData()
+        
         switch sender {
         case sortNameButton:
             viewModel.sortTaskList(type: .name) { [unowned self] in
-                tableView.reloadData()
+                DispatchQueue.main.async { [unowned self] in
+                    tableView.reloadData()
+                }
             }
         default:
             viewModel.sortTaskList(type: .date) { [unowned self] in
-                tableView.reloadData()
+                DispatchQueue.main.async { [unowned self] in
+                    tableView.reloadData()
+                }
             }
         }
         sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
@@ -279,7 +285,8 @@ extension TaskListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
-        cell.configure(with: viewModel.getTaskList(for: indexPath))
+        guard let cell = cell as? TableViewCell else { return UITableViewCell() }
+        cell.viewModel = viewModel.getTaskListCell(at: indexPath)
         return cell
     }
 }
@@ -303,7 +310,7 @@ extension TaskListViewController: UITableViewDelegate {
                     tableView.reloadSections([indexPath.section], with: .automatic)
                 }
                 isDone(true)
-        }
+            }
         
         let doneAction = UIContextualAction(
             style: .normal,
@@ -311,7 +318,7 @@ extension TaskListViewController: UITableViewDelegate {
                 viewModel.done(taskList: taskList)
                 tableView.reloadSections([indexPath.section], with: .automatic)
                 isDone(true)
-        }
+            }
         
         editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)

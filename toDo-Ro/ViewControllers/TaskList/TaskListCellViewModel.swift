@@ -24,6 +24,7 @@ protocol TaskListViewModelProtocol {
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void)
     func sortTaskList(type: TypeSort, completion: @escaping () -> Void)
     func getTaskViewModel(at: IndexPath) -> TasksViewModelProtocol
+    func getTaskListCell(at: IndexPath) -> TaskListsCellProtocol
     func titleForAlert(_: TaskLists?) -> String
     func checkingIsEmpty(textField: String?) -> Bool
     func sortButtonPressed()
@@ -106,6 +107,10 @@ final class TaskListViewModel: TaskListViewModelProtocol {
     
     func getTaskViewModel(at indexPath: IndexPath) -> TasksViewModelProtocol {
         TasksViewModel(taskList: taskLists[indexPath.section])
+    }
+    
+    func getTaskListCell(at indexPath: IndexPath) -> TaskListsCellProtocol {
+        TaskListsCellViewModel(list: taskLists[indexPath.section])
     }
     
     func saveNew(taskList: String, completion: @escaping (TaskLists) -> Void) {
