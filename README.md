@@ -27,7 +27,8 @@ Details:
 
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/213916703-d7f4372f-cc93-4b05-93dd-82ca807b3028.png"></code>
 
-When the task list is empty, the background image appears on the screen and the sort buttons disappear
+When the task list is empty, the background image appears on the screen and the sort buttons disappear.
+
 If you click Edit, the Add button will become inactive.
 
 <code><img height="500" src="https://user-images.githubusercontent.com/108235206/213917426-abcb8ab5-4c39-480b-8d16-db798671887c.png"></code>
