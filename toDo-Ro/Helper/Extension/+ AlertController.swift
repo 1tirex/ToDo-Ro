@@ -12,7 +12,9 @@ extension UIAlertController {
         case taskList, tasks
     }
     
-    static func createAlert(withTitle title: String, andMessage message: String) -> UIAlertController {
+    static func createAlert(
+        withTitle title: String,
+        andMessage message: String) -> UIAlertController {
         UIAlertController(
             title: title,
             message: message,
@@ -20,7 +22,10 @@ extension UIAlertController {
     }
     
     // MARK: taskList
-    func action(with taskList: TaskLists?, for alert: UIAlertController, delegate: UITextFieldDelegate? = nil, completion: @escaping (String) -> Void) {
+    func action(with taskList: TaskLists?,
+                for alert: UIAlertController,
+                delegate: UITextFieldDelegate? = nil,
+                completion: @escaping (String) -> Void) {
         let saveAction = saveAction(
             for: .taskList,
             taskList: taskList,

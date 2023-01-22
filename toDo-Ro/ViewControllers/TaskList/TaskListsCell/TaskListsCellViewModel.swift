@@ -25,17 +25,21 @@ final class TaskListsCellViewModel: TaskListsCellProtocol {
     
     
     var roundData: (Double, Int) {
+        
+        
         if taskLists.tasks?.count == 0 {
-            return (100, 1)
+            return (100, 0)
+        } else if taskLists.tasks?.count == currentTasks.count {
+            return (0 , countTask)
         } else {
             return (percent, countTask)
         }
     }
     
     private var percent: Double {
-        Double(currentTasks.count == 0
-               ? taskLists.tasks?.count ?? 1
-               : currentTasks.count) / Double(taskLists.tasks?.count ?? 1) * 10
+        currentTasks.count == 0
+        ? Double(10)
+        : Double(currentTasks.count) / Double(taskLists.tasks?.count ?? 1) 
     }
     
     private var countTask: Int {
@@ -43,12 +47,12 @@ final class TaskListsCellViewModel: TaskListsCellProtocol {
     }
     
     private let taskLists: TaskLists
-    private let currentTasks: [Task]
+    private var currentTasks: [Task] { StorageManager.shared
+            .fetchTasks(list: taskLists)
+            .filter { $0.isComplete == false}
+    }
     
     init(list: TaskLists) {
         taskLists = list
-        currentTasks = StorageManager.shared
-            .fetchTasks(list: list)
-            .filter { $0.isComplete == false}
     }
 }

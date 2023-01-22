@@ -9,12 +9,22 @@ import UIKit
 
 extension UITableViewCell {
     
-    func configure(with task: Task) {
+    func configure(with task: Task, index: IndexPath) {
         var content = defaultContentConfiguration()
         
-        content.text = task.name
-        content.secondaryText = task.note
+//        if index.section == 0 {
+            content.text = task.name
+//        } else {
+//            let attributeString = NSMutableAttributedString(string: task.name ?? "")
+//            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle,
+//                                         value: 2,
+//                                         range: NSRange(location: 0,
+//                                                        length: attributeString.length)
+//            )
+//            content.attributedText = attributeString
+//        }
         
+        content.secondaryText = task.note
         contentConfiguration = content
     }
 }

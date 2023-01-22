@@ -73,13 +73,17 @@ extension TasksViewController {
         let addButton = navigationItem.rightBarButtonItems?.first { $0.action == #selector(addButtonPressed) }
         
         if tableView.isEditing {
-            tableView.setEditing(false, animated: true)
-            addButton?.isEnabled = true
-            editButtonItem.title = "Edit"
+            DispatchQueue.main.async { [unowned self] in
+                tableView.setEditing(false, animated: true)
+                addButton?.isEnabled = true
+                editButtonItem.title = "Edit"
+            }
         } else {
-            tableView.setEditing(true, animated: true)
-            addButton?.isEnabled = false
-            editButtonItem.title = "Done"
+            DispatchQueue.main.async { [unowned self] in
+                tableView.setEditing(true, animated: true)
+                addButton?.isEnabled = false
+                editButtonItem.title = "Done"
+            }
         }
     }
 }
@@ -101,7 +105,7 @@ extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
         let task = viewModel.getTask(from: indexPath)
-        cell.configure(with: task)
+        cell.configure(with: task, index: indexPath)
         return cell
     }
 }
@@ -115,14 +119,18 @@ extension TasksViewController: UITableViewDelegate {
             style: .destructive,
             title: "Delete") { [unowned self] _, _, _ in
                 viewModel.remove(from: task)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
+                DispatchQueue.main.async {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
         }
         
         let editAction = UIContextualAction(
             style: .normal,
             title: "Edit") { [unowned self] _, _, isDone in
                 showAlert(with: task) {
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                    DispatchQueue.main.async {
+                        tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
                 }
                 isDone(true)
         }
@@ -132,13 +140,25 @@ extension TasksViewController: UITableViewDelegate {
             title: viewModel.titleForDoneAlert(for: indexPath)) { [unowned self] _, _, isDone in
                 
                 viewModel.done(task: task)
-                tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
+                DispatchQueue.main.async { [unowned self] in
+                    tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
+                }
                 isDone(true)
         }
         editAction.backgroundColor = #colorLiteral(red: 1, green: 0.5019607843, blue: 0, alpha: 1)
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         
         return UISwipeActionsConfiguration(actions: [doneAction, editAction, deleteAction])
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let task = viewModel.getTask(from: indexPath)
+        
+        DispatchQueue.main.async { [unowned self] in
+            tableView.deselectRow(at: indexPath, animated: true)
+            viewModel.done(task: task)
+            tableView.moveRow(at: indexPath, to: viewModel.destinationIndexRow(for: indexPath))
+        }
     }
 }
 

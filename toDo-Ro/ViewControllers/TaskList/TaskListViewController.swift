@@ -34,9 +34,10 @@ final class TaskListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
+        DispatchQueue.main.async { [unowned self] in
+            tableView.reloadData()
+        }
     }
-    
 }
 
 extension TaskListViewController {
@@ -55,11 +56,15 @@ extension TaskListViewController {
     }
     
     @objc func handleIn(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.15) { sender.alpha = 0.55 }
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.15) { sender.alpha = 0.55 }
+        }
     }
     
     @objc func handleOut(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.15) { sender.alpha = 1 }
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.15) { sender.alpha = 1 }
+        }
     }
     
     // MARK: Private Methods
@@ -87,10 +92,14 @@ extension TaskListViewController {
         UIColor { [unowned self] traitCollection in
             switch traitCollection.userInterfaceStyle {
             case .dark:
-                self.backgroundImage.image = UIImage(named: "ObjectDark")
+                DispatchQueue.main.async { [unowned self] in
+                    backgroundImage.image = UIImage(named: "ObjectDark")
+                }
                 return UIColor.systemBackground
             default:
-                self.backgroundImage.image = UIImage(named: "OBJECTS")
+                DispatchQueue.main.async { [unowned self] in
+                    backgroundImage.image = UIImage(named: "OBJECTS")
+                }
                 return UIColor.systemGray6
             }
         }
@@ -107,6 +116,7 @@ extension TaskListViewController {
         tableView.register(TableViewCell.self,forCellReuseIdentifier: viewModel.cellID)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = 100
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: sortNameButton.bottomAnchor, constant: 20),
@@ -186,21 +196,23 @@ extension TaskListViewController {
     
     private func pressedEditButton() {
         if tableView.isEditing {
-            tableView.setEditing(false, animated: true)
-            editButtonItem.title = "Edit"
-            addButton.isEnabled = true
+            DispatchQueue.main.async { [unowned self] in
+                tableView.setEditing(false, animated: true)
+                editButtonItem.title = "Edit"
+                addButton.isEnabled = true
+            }
         } else {
-            tableView.setEditing(true, animated: true)
-            editButtonItem.title = "Done"
-            addButton.isEnabled = false
+            DispatchQueue.main.async { [unowned self] in
+                tableView.setEditing(true, animated: true)
+                editButtonItem.title = "Done"
+                addButton.isEnabled = false
+            }
         }
     }
     
     private func sortingNameButton(_ sender: UIButton) {
         defoltButtonView(sortDateButton)
         defoltButtonView(sortNameButton)
-        
-        self.tableView.reloadData()
         
         switch sender {
         case sortNameButton:
@@ -216,11 +228,15 @@ extension TaskListViewController {
                 }
             }
         }
-        sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
+        DispatchQueue.main.async { [unowned self] in
+            sender.setImage(swapArrowButton(status: viewModel.status.value), for: .normal)
+        }
     }
     
     private func defoltButtonView(_ button: UIButton) {
-        button.setImage(nil, for: .normal)
+        DispatchQueue.main.async { //[unowned self] in
+            button.setImage(nil, for: .normal)
+        }
     }
     
     private func swapArrowButton(status: Bool) -> UIImage? {
@@ -231,7 +247,9 @@ extension TaskListViewController {
     
     private func save(taskName: String) {
         viewModel.saveNew(taskList: taskName) { [unowned self] taskList in
-            tableView.insertSections(IndexSet(integer: viewModel.numberOfSection - 1), with: .automatic)
+            DispatchQueue.main.async { [unowned self] in
+                tableView.insertSections(IndexSet(integer: viewModel.numberOfSection - 1), with: .automatic)
+            }
         }
     }
     
@@ -283,6 +301,7 @@ extension TaskListViewController: UITableViewDataSource {
         nil
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellID, for: indexPath)
         guard let cell = cell as? TableViewCell else { return UITableViewCell() }
@@ -300,14 +319,18 @@ extension TaskListViewController: UITableViewDelegate {
             style: .destructive,
             title: "Delete") { [unowned self] _, _, _ in
                 viewModel.delete(at: indexPath, taskList: taskList)
-                tableView.deleteSections([indexPath.section], with: .automatic)
+                DispatchQueue.main.async {
+                    tableView.deleteSections([indexPath.section], with: .automatic)
+                }
             }
         
         let editAction = UIContextualAction(
             style: .normal,
             title: "Edit") { [unowned self] _, _, isDone in
                 showAlert(with: taskList) {
-                    tableView.reloadSections([indexPath.section], with: .automatic)
+                    DispatchQueue.main.async {
+                        tableView.reloadSections([indexPath.section], with: .automatic)
+                    }
                 }
                 isDone(true)
             }
@@ -316,7 +339,9 @@ extension TaskListViewController: UITableViewDelegate {
             style: .normal,
             title: "Done") { [unowned self] _, _, isDone in
                 viewModel.done(taskList: taskList)
-                tableView.reloadSections([indexPath.section], with: .automatic)
+                DispatchQueue.main.async {
+                    tableView.reloadSections([indexPath.section], with: .automatic)
+                }
                 isDone(true)
             }
         
@@ -327,10 +352,14 @@ extension TaskListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        DispatchQueue.main.async {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
         let taskVC = TasksViewController()
         taskVC.viewModel = viewModel.getTaskViewModel(at: indexPath)
-        navigationController?.pushViewController(taskVC, animated: true)
+        DispatchQueue.main.async { [unowned self] in
+            navigationController?.pushViewController(taskVC, animated: true)
+        }
     }
 }
 

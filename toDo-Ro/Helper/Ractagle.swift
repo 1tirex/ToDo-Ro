@@ -11,7 +11,7 @@ import UIKit
 final class RatingView: UIView {
     
     private var labelPercentageNumber: UILabel!
-    private var roundView: UIView!
+    private var roundView: UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,11 +25,18 @@ final class RatingView: UIView {
     
     func updateCirclePercentage(percent: Double, count: Int) {
         if percent != 100  {
+            roundView?.isHidden = false
             createRound(percent: percent)
-            
-            labelPercentageNumber.text = percent >= 10
-            ? "🔥"
-            : "\(count)"
+            DispatchQueue.main.async { [unowned self] in
+                labelPercentageNumber.text = percent >= 10
+                ? "🔥"
+                : "\(count)"
+            }
+        } else {
+            DispatchQueue.main.async { [unowned self] in
+                labelPercentageNumber.text = ""
+                roundView?.isHidden = true
+            }
         }
     }
 }
@@ -45,31 +52,27 @@ private extension RatingView {
                                          y: 0,
                                          width: 50,
                                          height: 50))
-        roundView.backgroundColor = .clear
-        roundView.layer.cornerRadius = roundView.frame.size.width / 2
+        roundView?.backgroundColor = .clear
+        roundView?.layer.cornerRadius = (roundView?.frame.size.width ?? .zero) / 2
         
-        let circlePath = UIBezierPath(arcCenter: CGPoint (x: roundView.frame.size.width / 2,
-                                                          y: roundView.frame.size.height / 2),
-                                      radius: roundView.frame.size.width / 2,
+        let circlePath = UIBezierPath(arcCenter: CGPoint (x: (roundView?.frame.size.width ?? .zero) / 2,
+                                                          y: (roundView?.frame.size.height ?? .zero) / 2),
+                                      radius: (roundView?.frame.size.width ?? .zero) / 2,
                                       startAngle: CGFloat(-0.5 * .pi),
                                       endAngle: CGFloat(1.5 * .pi),
                                       clockwise: true)
-        self.addSubview(roundView)
         
-        let circleShapeBackground = createShape(circlePath)
-        roundView.layer.addSublayer(circleShapeBackground)
-        circleShapeBackground.strokeColor = (percent < 0.5)
-        ? UIColor.systemMint.cgColor
-        : UIColor.systemPink.cgColor
-        circleShapeBackground.strokeEnd = CGFloat(1)
+        self.addSubview(roundView ?? .init())
         
-        let circleShape = createShape(circlePath)
-        roundView.layer.addSublayer(circleShape)
-        circleShape.strokeColor = (percent < 0.5)
-        ? UIColor.systemPink.cgColor
-        : UIColor.systemMint.cgColor
-        circleShape.strokeEnd = CGFloat(percent/10)
+        let unDoneCircleShapeBackground = createShape(circlePath)
+        unDoneCircleShapeBackground.strokeColor = percent == 10
+        ? UIColor.systemMint.withAlphaComponent(0.8).cgColor
+        : UIColor.systemPink.withAlphaComponent(0.5).cgColor
+        unDoneCircleShapeBackground.strokeEnd = CGFloat(1)
         
+        let doneCircleShape = createShape(circlePath)
+        doneCircleShape.strokeColor = UIColor.systemMint.withAlphaComponent(0.8).cgColor
+        doneCircleShape.strokeEnd = CGFloat(1 - percent)
     }
     
     private func initPercentageLabelNumber() {
@@ -92,7 +95,6 @@ private extension RatingView {
             labelPercentageNumber.widthAnchor.constraint(equalToConstant: 20)
         ]
         NSLayoutConstraint.activate(constraints)
-        
     }
     
     private func createShape(_ circlePath: UIBezierPath) -> CAShapeLayer {
@@ -101,6 +103,7 @@ private extension RatingView {
         circleShape.fillColor = UIColor.clear.cgColor
         circleShape.lineWidth = 2.5
         circleShape.strokeStart = 0.0
+        roundView?.layer.addSublayer(circleShape)
         return circleShape
     }
 }

@@ -90,7 +90,7 @@ final class TasksViewModel: TasksViewModelProtocol {
     func taskIndex(status: Bool) -> IndexPath {
         status
         ? IndexPath(row: completedTasks.value.startIndex, section: 1)
-        : IndexPath(row: currentTasks.value.startIndex, section: 0)
+        : IndexPath(row: currentTasks.value.endIndex - 1, section: 0)
     }
     
     func done(task: Task) {
